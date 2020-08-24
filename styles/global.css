@@ -1,0 +1,41 @@
+@import '~antd/dist/antd.css';
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
+  Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  line-height: 1.6;
+  font-size: 18px;
+  --primary-color: #F5674B;
+  --primary-text-color: #333;
+  --secondary-text-color: #999;
+  overflow-x: hidden;
+  color: var(--primary-text-color);
+  /* background-color:; */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: #0070f3;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--secondary-text-color);
+  opacity: 0.4;
+}

@@ -1,0 +1,41 @@
+.section {
+  position: relative;
+  padding: 10px 0;
+}
+
+.container {
+  width: 100%;
+  max-width: 55rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  margin-top: 1rem;
+}
+
+.sectionBg div{
+  color: white;
+}
+
+.sectionBg::before {
+  content: '';
+  position: absolute;
+  left: -5%;
+  right: -5%;
+  top: -15%;
+  height: 120%;
+  background-color: #F65EC6;
+  transform: rotateZ(-2deg);
+}
+
+.sectionBgMirror::before {
+  top: 0%;
+  transform: rotateZ(2deg);
+}
+
+.sectionBgHigh::before {
+  height: 180%;
+}
