@@ -31,13 +31,6 @@ export default function BasicLayout({ children, page }) {
         <TopBar/>
         <Content>
           <main>{children}</main>
-          {page != 'home' && (
-            <div>
-              <Link href="/">
-                <a>← Back to home</a>
-              </Link>
-            </div>
-          )}
         </Content>
         <Footer/>
       </Layout>
