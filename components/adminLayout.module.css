@@ -1,5 +1,6 @@
 .siteLayout {
-  margin-left: 200px;
+  margin-left: 250px;
+  margin-bottom: 70px;
 }
 
 .content {
@@ -11,8 +12,12 @@
   padding: 0;
   position: fixed;
   z-index: 2;
-  width: 100%;
-  padding: 24px;
+  width: calc(100% - 250px);
+  padding: 0 16px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  background-color: rgb(62, 62, 80);
 }
 
 .sider {
@@ -23,29 +28,35 @@
   left: 0;
 }
 
+.siderFooter {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
 .toggleSiderCollapsed {
   display: none;
 }
 
+.siderHeader {
+  padding: 15px
+}
+
+.main {
+  max-width: 60rem;
+  margin: 0 auto;
+}
+
 @media(max-width: 991px) {
   .header {
-    padding: 24px 0;
+    width: 100%;
   }
 
   .siteLayout {
     margin-left: 0;
   }
 
-  .sider {
-    margin-top: 64px;
-    height: calc(100vh - 64px);
-  }
-
   .toggleSiderCollapsed {
     display: inline-block;
   }
-}
-
-.logo {
-  padding: 15px;
 }

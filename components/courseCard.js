@@ -3,10 +3,10 @@ import styles from './courseCard.module.css'
 const { Meta } = Card
 const { Text } = Typography
 
-const CourseCard = ({children, actions, title, extra, course, showMp}) => {
+const CourseCard = ({children, actions, title, extra, course = {}, showMp, loading, noHoverable}) => {
 
   const cover = (
-    <div style={{minHeight: '100px', background: '#EEE'}}>
+    <div style={{minHeight: '150px', background: '#EEE'}}>
       <img
         alt={course.name}
         src={course.cover && course.cover[0].url}
@@ -16,11 +16,11 @@ const CourseCard = ({children, actions, title, extra, course, showMp}) => {
 
   return (
     <Card
-      hoverable
+      hoverable={!noHoverable}
       title={title}
       extra={extra}
-      style={{ width: '100%', height: '100%', position: 'relative' }}
-      loading={!course.name}
+      className={styles.card}
+      loading={loading}
       cover={cover}
       actions={actions}
       bodyStyle={{paddingBottom: 70}}

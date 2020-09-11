@@ -17,12 +17,14 @@ if(!firebase.apps.length) {
 }
 
 const auth = firebase.auth();
+auth.setPersistence(firebase.auth.Auth.Persistence.NONE)
 const firestore = firebase.firestore()
 const storage = firebase.storage()
 
 export {
- auth,
- firebase,
- firestore,
- storage
+  auth,
+  firestore,
+  storage
 };
+
+export default firebase

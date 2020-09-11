@@ -1,10 +1,19 @@
+.nav {
+  height: 120px;
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  background: rgb(0,0,0);
+  background: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 100%);
+}
+
 .container {
-  height: 64px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 10px;
 }
 
 .logo {
-  width: 55px;
+  width: 50px;
 }

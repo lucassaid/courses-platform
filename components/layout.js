@@ -1,5 +1,4 @@
 import Head from 'next/head'
-import Link from 'next/link'
 import Footer from './footer'
 import { Layout } from 'antd';
 import TopBar from './topBar'
@@ -27,7 +26,7 @@ export default function BasicLayout({ children, page }) {
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
 
-      <Layout>
+      <Layout style={{position: 'relative'}}>
         <TopBar/>
         <Content>
           <main>{children}</main>

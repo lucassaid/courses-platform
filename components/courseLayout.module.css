@@ -1,0 +1,49 @@
+.siteLayout {
+  margin-left: 300px;
+}
+
+.content {
+  margin: 74px 16px 0;
+  overflow: initial;
+}
+
+.header {
+  padding: 0;
+  position: fixed;
+  z-index: 2;
+  width: calc(100% - 300px);
+  padding: 0 16px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+}
+
+.sider {
+  overflow: auto;
+  height: 100vh;
+  position: fixed;
+  z-index: 2;
+  left: 0;
+}
+
+.toggleSiderCollapsed {
+  display: none;
+}
+
+.siderHeader {
+  padding: 15px
+}
+
+@media(max-width: 991px) {
+  .header {
+    width: 100%;
+  }
+
+  .siteLayout {
+    margin-left: 0;
+  }
+
+  .toggleSiderCollapsed {
+    display: inline-block;
+  }
+}

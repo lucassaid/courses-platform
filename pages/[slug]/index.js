@@ -1,11 +1,10 @@
-import { getAllCoursesIds, getCourseData } from '../../lib/courses'
 import Layout, { siteTitle } from '../../components/layout'
 import Head from 'next/head'
 import HeaderImage from '../../components/headerImage'
 import Section from '../../components/section'
 import utilStyles from '../../styles/utils.module.css'
 import CoursesList from '../../components/coursesList'
-import { Typography, Collapse, Row, Col, Card, Button} from 'antd'
+import { Typography, Row, Col, Card, Button} from 'antd'
 import {
   PlayCircleOutlined,
   FileDoneOutlined,
@@ -13,14 +12,16 @@ import {
   CommentOutlined,
   EyeOutlined
 } from '@ant-design/icons'
+import LessonsPreview from '../../components/lessonsPreview'
+import useSWR from 'swr'
+import { useRouter } from 'next/router'
 
 const { Title, Text } = Typography
-const { Panel } = Collapse
 
 const WhyToBuyList = ({icon, text}) => {
 
   const whyToBuyArr = [
-    {key: '1', icon: <PlayCircleOutlined/>, text: "20 clases en video"},
+    // {key: '1', icon: <PlayCircleOutlined/>, text: "20 clases en video"},
     {key: '2', icon: <FileDoneOutlined/>, text: "Material para descargar"},
     {key: '3', icon: <CoffeeOutlined/>, text: "Hacelo a tu ritmo"},
     {key: '4', icon: <CommentOutlined/>, text: "Ayuda para lo que necesites"},
@@ -38,20 +39,30 @@ const WhyToBuyList = ({icon, text}) => {
   )
 }
 
+const fetcher = url => fetch(url).then(r => r.json())
 
-export default function Post({course}) {
+export default function CourseOverview() {
+
+  const router = useRouter()
+  const { data: course = {}, error } = useSWR(`/api/courses/${router.query.slug}`, fetcher)
+
+  if (error) return <div>failed to load</div>
 
   const buyCard = (
-    <Card>
+    <Card loading={!course.id}>
       <Text type="secondary">¡Comprá ahora!</Text>
       <Title style={{fontWeight: 300, margin: '10px 0'}} >${course.price}</Title>
-      <Button
-        style={{width: '100%', marginBottom: 10}}
-        type="primary"
-        size="large"
-      >
-        Comprar
-      </Button>
+      {course.paylink && (
+        <a href={course.paylink}>
+          <Button
+            style={{width: '100%', marginBottom: 10}}
+            type="primary"
+            size="large"
+          >
+            Comprar
+          </Button>
+        </a>
+      )}
       <WhyToBuyList></WhyToBuyList>
       <br/><br/>
       <div style={{textAlign:'right'}}>
@@ -68,7 +79,7 @@ export default function Post({course}) {
       </Head>
 
       <HeaderImage
-        src={course.cover[0].url}
+        src={course.id && course.cover[0].url}
         alt={course.name}
       />
 
@@ -78,23 +89,15 @@ export default function Post({course}) {
             <Title level={2}>{course.name}</Title>
             {course.desc}
 
-            <Title level={3}>Contenido del curso</Title>
-            <Collapse defaultActiveKey={['1']} >
-              <Panel header="Introducción" key="1" extra="5 lecciones">
-                <p>leccion</p>
-              </Panel>
-              <Panel header="Armado y planificación" key="2" extra="5 lecciones">
-                <p>leccion</p>
-              </Panel>
-              <Panel header="Calcular cantidades" key="3" disabled extra="5 lecciones">
-                <p>leccion</p>
-              </Panel>
-            </Collapse>
+            {/* <Title level={3}>Contenido del curso</Title>
+            <LessonsPreview
+              sections={course.sections}
+              sectionsOrder={course.sectionsOrder}
+            /> */}
           </Col>
           <Col xs={24} md={9}>
             {buyCard}
           </Col>
-
         </Row>
       </Section>
 
@@ -104,13 +107,4 @@ export default function Post({course}) {
       {/* <div dangerouslySetInnerHTML={{ __html: course.contentHtml }} /> */}
     </Layout>
   )
-}
-
-export async function getServerSideProps(context) {
-  const course = await getCourseData(context.params.id)
-  return {
-    props: {
-      course
-    }
-  }
 }

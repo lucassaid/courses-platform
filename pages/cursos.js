@@ -1,14 +1,12 @@
 import Head from 'next/head'
-import Layout, { siteTitle } from '../../components/layout'
-import Section from '../../components/section'
+import Layout, { siteTitle } from '../components/layout'
+import Section from '../components/section'
 import { Typography } from 'antd'
-import CoursesList from '../../components/coursesList'
-import utilStyles from '../../styles/utils.module.css'
+import CoursesList from '../components/coursesList'
 
-const { Title, Paragraph, Text } = Typography;
+const { Title, Text } = Typography;
 
 const Courses = () => {
-
   return (
     <Layout page="home">
       <Head>

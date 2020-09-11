@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Upload } from 'antd';
-import { storage, firebase } from '../firebase'
+import { storage } from '../firebase/index'
 
 const CustomUpload = ({ folder, children, ...props}) => {
 

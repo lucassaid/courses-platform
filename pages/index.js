@@ -5,6 +5,7 @@ import Section from '../components/section'
 import { Avatar, Row, Col, Typography } from 'antd'
 import CoursesList from '../components/coursesList'
 import utilStyles from '../styles/utils.module.css'
+import HomeHeader from '../components/homeHeader'
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -42,6 +43,8 @@ const IndexPage = () => {
       </Head>
 
       {/* <form action="/procesar-pago" method="POST" id="mercadoForm" /> */}
+
+      <HomeHeader/>
 
       <Section className={utilStyles.headingMd}>
         <Row gutter={[8, 24]}>
