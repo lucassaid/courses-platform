@@ -1,12 +1,11 @@
 import CourseLayout from '../../components/courseLayout'
-import { getCourseLessons } from '../../lib/courses'
 import { Menu, Card, Avatar } from 'antd';
 import { AppstoreOutlined, PlayCircleOutlined, SettingOutlined } from '@ant-design/icons';
 
 const { Meta } = Card
 const { SubMenu } = Menu;
 
-const Course = ({course}) => {
+const Course = () => {
 
   const menu = (
     <Menu
@@ -63,10 +62,3 @@ const Course = ({course}) => {
   )
 }
 export default Course
-
-export async function getServerSideProps(context) {
-  const course = await getCourseLessons(context.params.slug[0])
-  return {
-    props: {course}
-  }
-}
