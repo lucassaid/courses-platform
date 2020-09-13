@@ -41,6 +41,7 @@ const linkStyles = {
 
 const Lesson = ({
   courseSlug,
+  lessonId,
   lesson,
   index,
   onDelete,
@@ -48,11 +49,11 @@ const Lesson = ({
   dragDisabled
 }) => {
 
-  const selected = selectedLesson == lesson.id
+  const selected = selectedLesson == lessonId
 
   return (
     <Draggable
-      draggableId={lesson.id}
+      draggableId={lessonId}
       index={index}
       isDragDisabled={dragDisabled}
     >
@@ -67,12 +68,12 @@ const Lesson = ({
             <MenuOutlined></MenuOutlined>  
           </Handle>
           <Link
-            key={lesson.id}
-            href={{ pathname: '/admin/courses/[slug]/lessons', query: { s: lesson.id } }}
-            as={{ pathname: `/admin/courses/${courseSlug}/lessons`, query: { s: lesson.id } }}
+            key={lessonId}
+            href={{ pathname: '/admin/courses/[slug]/lessons', query: { s: lessonId } }}
+            as={{ pathname: `/admin/courses/${courseSlug}/lessons`, query: { s: lessonId } }}
           >
             <a style={linkStyles}>
-              {lesson.title}
+              {lesson && lesson.title}
             </a>
           </Link>
           <Popconfirm

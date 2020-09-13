@@ -2,21 +2,14 @@ import AdminLayout from '../../../components/adminLayout'
 import AdminCourses from '../../../components/adminCourses'
 import { PageHeader, Button } from 'antd'
 import Link from 'next/link'
-import useSWR, { mutate } from 'swr'
+import useSWR from 'swr'
 
 const RenderedCourses = ({courses, error}) => {
   if (error) return <div>failed to load</div>
   if (!courses) return <div>loading...</div>
-  
-  const handleOrderChanged = newCourses => {
-    mutate(`/api/courses?admin=true`, newCourses)
-  }
 
   return (
-    <AdminCourses 
-      courses={courses}
-      onOrderChanged={handleOrderChanged}  
-    />
+    <AdminCourses courses={courses}/>
   )
 }
 
@@ -24,7 +17,7 @@ const fetcher = url => fetch(url).then(r => r.json())
 
 const Courses = () => {
 
-  const { data: courses, error } = useSWR(`/api/courses?admin=true`, fetcher)
+  const { data: courses, error } = useSWR(`/api/courses`, fetcher)
 
   return(
     <AdminLayout page="courses">

@@ -1,5 +1,5 @@
-import admin from '../../../firebase/admin'
-import cookies from '../../../utils/cookies'
+import admin from '../../firebase/admin'
+import cookies from '../../utils/cookies'
 import Tokens from 'csrf'
 
 const tokens = new Tokens()
@@ -8,6 +8,7 @@ const secret = tokens.secretSync()
 
 const handler = async (req, res) => {
   if(req.method === 'GET') {
+    // send csrf token
     try {
       var token = tokens.create(secret)
       res.send(token)
@@ -17,6 +18,7 @@ const handler = async (req, res) => {
     }
   } 
   if(req.method === 'POST') {
+    // validate csrf token and create sessionCookie with idToken
     try {
       // Get the ID token passed and the CSRF token.
       const idToken = req.body.idToken.toString();

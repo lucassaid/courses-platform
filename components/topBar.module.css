@@ -1,10 +1,10 @@
 .nav {
-  height: 120px;
+  height: 100px;
   position: absolute;
   z-index: 10;
   width: 100%;
   background: rgb(0,0,0);
-  background: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 100%);
+  background: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 100%);
 }
 
 .container {
@@ -16,4 +16,8 @@
 
 .logo {
   width: 50px;
+}
+
+.link {
+  color: white;
 }

@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import Head from 'next/head'
 import Layout, { name, siteTitle } from '../components/layout'
 import Section from '../components/section'
@@ -6,10 +5,11 @@ import { Avatar, Row, Col, Typography } from 'antd'
 import CoursesList from '../components/coursesList'
 import utilStyles from '../styles/utils.module.css'
 import HomeHeader from '../components/homeHeader'
+// import getHomeSlides from '../lib/home'
 
 const { Title, Paragraph, Text } = Typography;
 
-const IndexPage = () => {
+const IndexPage = ({slides}) => {
 
   // const items = [
   //   {
@@ -84,3 +84,11 @@ const IndexPage = () => {
 }
 
 export default IndexPage
+
+
+// export async function getServerSideProps(context) {
+//   const slides = await getHomeSlides()
+//   return {
+//     props: { slides },
+//   }
+// }

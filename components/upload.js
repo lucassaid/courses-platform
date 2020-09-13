@@ -1,17 +1,27 @@
 import { useState } from 'react'
 import { Upload } from 'antd';
-import { storage } from '../firebase/index'
+import { storage, auth } from '../firebase/index'
+import axios from 'axios'
 
-const CustomUpload = ({ folder, children, ...props}) => {
+const CustomUpload = ({ path = '', children, limit, hideUploaded, ...props}) => {
 
   const [fileList, setFileList] = useState(props.fileList || [])
   const [filesURLs, setFilesURLs] = useState({})
 
-  const uploadImage = options => {
+  const uploadImage = async options => {
     const { onSuccess, onError, file, onProgress } = options;
-    const storageRef = storage.ref()
+    
+    // temporarily authenticate with a new token
+    try {
+      const { data: uploadToken } = await axios.get('/api/uploadToken')
+      await auth.signInWithCustomToken(uploadToken)
+    } catch(err) {
+      console.warn(err)
+      onError()
+      return
+    }
 
-    const path = `images/${folder ? `${folder}/` : ''}`
+    const storageRef = storage.ref()
     const fullPathd = `${path}${Date.now()}_${file.name}`
     const uploadTask = storageRef.child(fullPathd).put(file);
 
@@ -29,15 +39,20 @@ const CustomUpload = ({ folder, children, ...props}) => {
     }, error => {
       console.log(error)
       onError()
+      auth.signOut() // logout
     }, async () => {
       const downloadURL = await uploadTask.snapshot.ref.getDownloadURL()
       setFilesURLs({[file.uid]: downloadURL})
       onSuccess()
+      auth.signOut() // logout
     });
   }
 
   const onChange = ({fileList: newFileList}) => {
-    const formatedFileList = newFileList.map(file => {
+    if(limit) {
+      newFileList = newFileList.slice(-limit)
+    }
+    let formatedFileList = newFileList.map(file => {
       const url = filesURLs[file.uid]
       if(!url) return file
       return {
@@ -47,8 +62,12 @@ const CustomUpload = ({ folder, children, ...props}) => {
         status: 'done'
       }
     })
-    setFileList(formatedFileList);
     props.onChange && props.onChange(formatedFileList)
+    
+    if(hideUploaded) {
+      formatedFileList = formatedFileList.filter(file => file.status != 'done')
+    }
+    setFileList(formatedFileList);
   }
 
   return(

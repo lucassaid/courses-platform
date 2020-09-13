@@ -1,22 +1,37 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
 import CoursesList from './coursesList'
-import { message, Card } from 'antd'
-import { firestore as ref } from '../../firebase/index'
+import { message } from 'antd'
+import axios from 'axios'
+import { mutate } from 'swr'
 
 const getOrderedIds = courses => {
   return Object.keys(courses).sort((a, b) => courses[a].order - courses[b].order)
 }
 
-const AdminCourses = ({courses, onOrderChanged}) => {
+const saveOrder = async (ids, setDragDisabled) => {    
+  message.loading({ content: 'Guardando cursos', key: 'saving' })
+  setDragDisabled(true)
+  try {
+    let updateObj = {}
+    ids.forEach((id, i) => {
+      updateObj[id] = {order: i}
+    })
+    await axios.put('/api/courses', { courses: updateObj })
+    mutate(`/api/courses`)
+    message.success({ content: 'Cursos guardados', key: 'saving' });
+  } catch(e) {
+    console.warn(e)
+    message.error({ content: 'Error al guardar los cursos', key: 'saving' });
+  } finally {
+    setDragDisabled(false)
+  }
+}
+
+const AdminCourses = ({courses}) => {
 
   const [ids, setIds] = useState(getOrderedIds(courses))
   const [dragDisabled, setDragDisabled] = useState(false)
-  const [firstTime, setFirstTime] = useState(true)
-
-  useEffect(() => {
-    saveOrder()
-  }, [ids])
 
   const onDragEnd = result => {
     const { destination, source, draggableId } = result
@@ -29,35 +44,7 @@ const AdminCourses = ({courses, onOrderChanged}) => {
     newIds.splice(destination.index, 0, draggableId)
 
     setIds(newIds)
-  }
-
-  const saveOrder = async () => {
-    // prevent saving first time
-    if(firstTime) {
-      setFirstTime(false)
-      return
-    }
-    
-    message.loading({ content: 'Guardando cursos', key: 'saving' })
-    setDragDisabled(true)
-    try {
-      // update all courses with a batch write
-      let batch = ref.batch();
-      let newCourses = {}
-      ids.forEach((id, i) => {
-        let courseRef = ref.collection('courses').doc(id)
-        batch.update(courseRef, {order: i})
-        newCourses[id] = { ...courses[id], order: i }
-      })
-      await batch.commit()
-      onOrderChanged(newCourses)
-      message.success({ content: 'Cursos guardados', key: 'saving' });
-    } catch(e) {
-      console.log(e)
-      message.error({ content: 'Error al guardar los cursos', key: 'saving' });
-    } finally {
-      setDragDisabled(false)
-    }
+    saveOrder(newIds, setDragDisabled)
   }
 
   return (

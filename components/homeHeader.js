@@ -1,32 +1,29 @@
 import { Carousel } from 'antd'
+import useSWR from 'swr'
+import styles from './homeHeader.module.css'
 
-const contentStyle = {
-  height: '500px',
-  color: '#fff',
-  lineHeight: '160px',
-  alignItems: 'center',
-  justifyContent: 'center',
-  background: '#364d79',
-  display: 'flex'
-};
+const fetcher = url => fetch(url).then(r => r.json())
 
 const HomeHeader = ({}) => {
+
+  const {data: slides, error} = useSWR('/api/customization/homeSlides', fetcher)
+  const slidesArr = slides && Object.values(slides).sort((a, b) => a.order - b.order)
+
   return(
     <div style={{marginBottom: 30}}>
-      <Carousel 
-      >
-        <div>
-          <img style={{width: '100%', height: 500, objectFit: 'cover'}} src="/images/27559.jpg" alt=""/>
-        </div>
-        <div>
-          <h2 style={contentStyle}>2</h2>
-        </div>
-        <div>
-          <h2 style={contentStyle}>3</h2>
-        </div>
-        <div>
-          <h2 style={contentStyle}>4</h2>
-        </div>
+      <Carousel autoplay>
+        {slides ? slidesArr.map(slide => (
+          <div key={slide.uid}>
+            <div
+              style={{backgroundImage: `url(${slide.url})`}}
+              className={styles.content}
+            />
+          </div>
+        )):(
+          <div>
+            <div className={styles.content}></div>
+          </div>
+        )}
       </Carousel>
     </div>
   )

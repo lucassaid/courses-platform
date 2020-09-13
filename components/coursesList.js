@@ -7,7 +7,7 @@ const fetcher = url => fetch(url).then(r => r.json())
 
 const CoursesList = () => {
 
-  const { data, error } = useSWR('/api/courses', fetcher)
+  const { data, error } = useSWR('/api/courses?hideUnpublished=true', fetcher)
 
   if (error) return <div>failed to load</div>
   if (!data) return <div>loading...</div>

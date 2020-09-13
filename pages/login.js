@@ -4,16 +4,16 @@ import Head from 'next/head'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import axios from 'axios'
 
-const api = '/api/auth/sessionLogin'
+const api = '/api/sessionLogin'
 
 const handleSignIn = async authResult => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const redirect = urlParams.get('redirect') || ''
+  const urlParams = new URLSearchParams(window.location.search)
+  const redirect = urlParams.get('redirect') || '/'
   const { data: csrfToken } = await axios.get(api)
   const idToken = await authResult.user.getIdToken()
   await axios.post(api, {idToken, csrfToken})
   await auth.signOut()
-  window.location.href = `/${redirect}`
+  window.location.href = redirect
   return false
 }
 

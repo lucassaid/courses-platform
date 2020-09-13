@@ -1,25 +1,14 @@
-import React, {useState } from 'react'
+import React, { useState, useReducer, useEffect } from 'react'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import Section from './section'
 import { Button, Typography } from 'antd'
 import NewSectionPrompt from './newSectionPrompt'
 import styled from 'styled-components'
-import { useDispatch } from 'react-redux'
-import { update } from '../../firebase/client-functions'
 import { message, Modal, Input } from 'antd'
 import { useRouter } from 'next/router'
-import store from '../../store'
-
-import {
-  addSection,
-  deleteSection,
-  reorderSections,
-  changeSectionTitle,
-  reorderLessons,
-  selectContent,
-  addLesson,
-  deleteLesson
-} from '../../lib/slices/contentsSlice'
+import axios from 'axios'
+import { mutate } from 'swr'
+import sectionsReducer from '../../lib/reducers/sections'
 
 const SectionList = styled.div`
   display: block;
@@ -41,15 +30,11 @@ const initialModalState =  {
   loading: false
 }
 
-const saveSectionsHelper = async (courseId, setDragDisabled) => {
-  const state = store.getState()
-  const { sections, sectionsOrder } = state.contents[courseId]
-
+const saveCourse = async (updateObj, courseId, setDragDisabled) => {
   try {
     setDragDisabled(true)
     message.loading({ content: 'Guardando...', key: 'saving' })
-    const config = { path: ['courses', courseId] }
-    await update({ sections, sectionsOrder }, config)
+    await axios.put(`/api/courses/`, {courses: {[courseId]: updateObj}})
     message.success({ content: 'Cambios guardados', key: 'saving', duration: 1 });
   } catch(e) {
     message.error({ content: 'Error al guardar los cambios', key: 'saving', duration: 2 });
@@ -58,19 +43,34 @@ const saveSectionsHelper = async (courseId, setDragDisabled) => {
   }
 }
 
-const ContentBoard = ({course, content, selectedLesson, }) => {
+function init(course) {
+  return {
+    sections: course.sections || {},
+    sectionsOrder: course.sectionsOrder || []
+  }
+}
+
+const ContentBoard = ({course, lessons, selectedLesson, }) => {
 
   const router = useRouter()
-  const dispatch = useDispatch()
   
   const courseId = course.id
   const [addingSection, setAddingSection] = useState(false)
   const [dragDisabled, setDragDisabled] = useState(false)
   const [newLessonModal, setNewLessonModal] = useState(initialModalState)
-  const { lessons = {}, sections = {}, sectionsOrder = []} = content
+  
+  const [content, dispatch] = useReducer(sectionsReducer, course, init)
+  const {sections, sectionsOrder, changedByUser} = content
 
-  const saveSections = async () => {
-    await saveSectionsHelper(courseId, setDragDisabled)
+  useEffect(() => {
+    const {sections, sectionsOrder, changedByUser} = content
+    if(changedByUser) saveUpdatedCourse({sections, sectionsOrder})
+  }, [content])
+
+  const saveUpdatedCourse = async updateObj => {
+    await saveCourse(updateObj, courseId, setDragDisabled)
+    mutate(`/api/courses/${course.slug}`)
+    dispatch({type: 'reset-changed-by-user'})
   }
 
   const onDragEnd = result => {
@@ -83,28 +83,24 @@ const ContentBoard = ({course, content, selectedLesson, }) => {
       return
     }
     if(type === 'GLOBAL') {
-      dispatch(reorderSections({...result, courseId}))
+      dispatch({type: 'reorder-sections', payload: result})
     } else {
-      dispatch(reorderLessons({result, courseId, sections}))
+      dispatch({type: 'reorder-lessons', payload: result})
     }
-    saveSections()
   }
 
   const addSectionFromPropmt = (title) => {
     setAddingSection(false)
     const id = `section-${sectionsOrder.length + 1}-${Date.now()}`
-    dispatch(addSection({id, title, courseId}))
-    saveSections()
+    dispatch({type: 'add-section', payload: {id, title}})
   }
 
   const onDeleteSection = (sectionId, index) => {
-    dispatch(deleteSection({courseId, sectionId, index}))
-    saveSections()
+    dispatch({type: 'delete-section', payload: {sectionId, index}})
   }
 
   const changeTitle = (title, sectionId) => {
-    dispatch(changeSectionTitle({courseId, sectionId, title}))
-    saveSections()
+    dispatch({type: 'change-section-title', payload: {sectionId, title}})
   }
 
   const updateNewLessonModal = (prop, value) => {
@@ -123,19 +119,24 @@ const ContentBoard = ({course, content, selectedLesson, }) => {
   }
 
   const onModalAccept = async () => {
-    if(newLessonModal.title === '') return
+    const { title } = newLessonModal 
+    if(title === '') return
     updateNewLessonModal('loading', true)
-    const { payload } = await dispatch(addLesson({
-      sectionId: newLessonModal.addTo,
-      courseId,
-      title: newLessonModal.title
-    }))
-    await saveSections()
-    const newLessonId = Object.keys(payload)[0]
+
+    // save
+    const { data } = await axios.post(`/api/courses/lessons?courseId=${courseId}`, {lesson: {title}})
+    mutate(`/api/courses/lessons?courseId=${courseId}`)
+    
+    // update
+    const newLessonId = Object.keys(data)[0]
+    const sectionId = newLessonModal.addTo
+    dispatch({type: 'add-lesson', payload: { newLessonId, sectionId}})
+
+    // redirect and close modal
     const href= { pathname: '/admin/courses/[slug]/lessons', query: { s: newLessonId } }
     const as= { pathname: `/admin/courses/${course.slug}/lessons`, query: { s: newLessonId } }
     setNewLessonModal(initialModalState)
-    router.push(href, as)
+    router.push(href, as, {query: { s: newLessonId }})
   }
 
   const cancelNewLesson = () => {
@@ -150,9 +151,10 @@ const ContentBoard = ({course, content, selectedLesson, }) => {
       const as = `/admin/courses/${course.slug}/lessons`
       router.push(href, as)
     }
-    dispatch(deleteLesson({index, sectionId, courseId}))
-    saveSections()
+    dispatch({type: 'delete-lesson', payload: {index, sectionId}})
   }
+
+  if(!lessons) return 'Cargando lecciones'
 
   return (
     <div>
@@ -170,12 +172,12 @@ const ContentBoard = ({course, content, selectedLesson, }) => {
             >
               {sectionsOrder.map((sectionId, index) => {
                 const section = sections[sectionId]
-                const sectionLessons = section.lessonsIds.map(lessonId => lessons[lessonId])
                 return (
                   <Section
                     key={sectionId}
                     section={section}
-                    lessons={sectionLessons}
+                    lessonsIds={section.lessonsIds}
+                    lessons={lessons}
                     index={index}
                     courseSlug={course.slug}
                     onDelete={() => onDeleteSection(sectionId, index)}

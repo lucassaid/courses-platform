@@ -1,5 +1,5 @@
-import admin from '../../../firebase/admin'
-import { getDoc } from '../../../firebase/admin-functions'
+import admin from '../../firebase/admin'
+import { getDoc } from '../../firebase/admin-functions'
 
 export default async function (req, res) {
   try {
@@ -7,7 +7,10 @@ export default async function (req, res) {
     // Verify the session cookie. In this case an additional check is added to detect
     // if the user's Firebase session was revoked, user deleted/disabled, etc.
     const decodedClaims = await admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */)
+
+    // get all other user data with uid
     const { uid } = decodedClaims
+    admin.auth().setCustomUserClaims(uid, {admin: true})
     const userDoc = await getDoc(uid, {path: ['users']})
     res.send({user: {...userDoc[uid], ...decodedClaims}})
   } catch(err) {

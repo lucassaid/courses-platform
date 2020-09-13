@@ -61,7 +61,7 @@ const CourseForm = ({onFinish, initialValues}) => {
           getValueFromEvent={normFile}
           rules={[{ required: true }]}
         >
-          <UploadWithCrop aspect={16/9} folder="courses" listType="picture">
+          <UploadWithCrop limit={1} aspect={16/9} path="coverImages/" listType="picture">
             <Button>
               <UploadOutlined/> Elegir imagen
             </Button>

@@ -8,6 +8,7 @@ import {
   UserOutlined,
   UploadOutlined,
   MenuUnfoldOutlined,
+  EditOutlined
 } from '@ant-design/icons';
 import styles from './adminLayout.module.css'
 import UploadsDrawer from './uploadsDrawer'
@@ -53,6 +54,12 @@ const AdminMenu = ({page}) => {
             <a>Usuarios</a>
           </Link>
         </Menu.Item>
+        <Menu.Item key="customization" icon={<EditOutlined />}>
+          <Link href="/admin/customization">
+            <a>Personalización</a>
+          </Link>
+        </Menu.Item>
+        
       </Menu>
     </>
   )

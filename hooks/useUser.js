@@ -6,12 +6,12 @@ import useSWR from 'swr'
 const fetcher = url => fetch(url).then(r => r.json())
 
 export default function useUser(adminRequired) {
-  const swr = useSWR('/api/auth/user', fetcher)
+  const swr = useSWR('/api/user', fetcher)
   useEffect(() => {
     if(swr.data && (!swr.data.user || (adminRequired && !swr.data.user.admin))) {
       // redirect to login
       Router.replace(
-        `/login`
+        `/login?redirect=/admin`
       )
     }
   }, [swr.data])

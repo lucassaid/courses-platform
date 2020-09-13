@@ -36,7 +36,7 @@ const TopBar = ({props}) => {
         <Space size="large">
           {navItems.map(item => (
             <Link href={item.href} key={item.href}>
-              <a style={{color: 'white'}} alt={item.label}>{item.label}</a>
+              <a className={styles.link} alt={item.label}>{item.label}</a>
             </Link>
           ))}
         </Space>

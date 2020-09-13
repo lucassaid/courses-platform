@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react'
 import AdminLayout from '../../../components/adminLayout'
 import { PageHeader, Button, Table, Avatar } from 'antd'
 import Link from 'next/link'

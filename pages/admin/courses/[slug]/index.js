@@ -1,13 +1,15 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState } from 'react'
 import CourseCard from '../../../../components/courseCard'
 import AdminLayout from '../../../../components/adminLayout'
-import { Modal, PageHeader, Button, Row, Col, Card, message, Badge } from 'antd'
+import { Modal, PageHeader, Button, Row, Col, Card, message, Badge, Typography } from 'antd'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { DeleteOutlined, EyeInvisibleOutlined } from '@ant-design/icons'
 import LessonsPreview from '../../../../components/lessonsPreview'
-import { update } from '../../../../firebase/client-functions'
 import useSWR, { mutate } from 'swr'
+import axios from 'axios'
+
+const { Text } = Typography
 
 const fetcher = url => fetch(url).then(r => r.json())
 
@@ -16,25 +18,24 @@ const CourseOverview = () => {
   const router = useRouter()
   const { slug } = router.query
   const { data: course = {}, error } = useSWR(`/api/courses/${slug}`, fetcher)
-  const { data: lessons = {}, error: lessonsError } = useSWR(`/api/courses/${slug}/lessons`, fetcher)
+  const { data: lessons = {}, error: lessonsError } = useSWR(() =>`/api/courses/lessons?courseId=${course.id}`, fetcher)
   const [updatingCourse, setUpdatingCourse] = useState(false)
   
-  const config = {path: ['courses', course.id]}
-
   const handlePublish = async () => {
     setUpdatingCourse(true)
-    const published = !course.published
-    await update({published}, config)
-    mutate(`/api/courses/${slug}`, {...course, published})
+    await axios.put(`/api/courses`, {courses: {[course.id]: {published: !course.published}}})
+    mutate(`/api/courses/${slug}`, {...course, published: !course.published})
     setUpdatingCourse(false)
   }
 
   const deleteCourse = async () => {
     // this only sets 'archived' = true
     setUpdatingCourse(true)
-    await update({archived: true}, config)
+    await axios.put(`/api/courses`, {courses: {[course.id]: {archived: true}}})
+    mutate(`/api/courses/${slug}`, {...course, archived: true})
     message.success({ content: 'Curso eliminado', duration: 1 });
     router.push('/admin/courses/')
+    setUpdatingCourse(false)
     return 'ok'
   }
 
@@ -96,10 +97,23 @@ const CourseOverview = () => {
             loading={!course == {}}
           >
             <br/>
-            link:
-            <Link href="/courses/[slug]" as={`/courses/${course.slug}`}>
-              <a> ameliejulieta.com/{course.slug}</a>
-            </Link>
+            <div>
+              link en la pagina:
+              <Link href="/courses/[slug]" as={`/courses/${course.slug}`}>
+                <a>&nbsp; ameliejulieta.com/{course.slug}</a>
+              </Link>
+            </div>
+            <br/>
+            <div>
+              link de pago: &nbsp;
+              {course.paylink ? (
+                <a target="_blank" href={course.paylink}>
+                  <Button>Comprar</Button>
+                </a>
+              ):(
+                <Text type="secondary"> Este curso no tiene link de pago todavía</Text>
+              )}
+            </div>
           </CourseCard>
         </Col>
         <Col xs={24} md={12}>

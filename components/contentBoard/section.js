@@ -3,7 +3,6 @@ import { Droppable, Draggable } from 'react-beautiful-dnd'
 import Lesson from './lesson'
 import { Button, Typography, Tooltip } from 'antd'
 import { DeleteOutlined, PlusOutlined, PlusCircleOutlined } from '@ant-design/icons'
-import { useRouter } from 'next/router'
 import TitleEditable from '../titleEditable'
 
 const { Text } = Typography
@@ -53,6 +52,7 @@ const emptySection = (
 
 const Section = ({
   section,
+  lessonsIds,
   lessons,
   onDelete,
   index,
@@ -64,16 +64,13 @@ const Section = ({
   selectedLesson
 }) => {
 
-  const router = useRouter()
-  const { slug } = router.query
-
   const TopSection = ({handleProps}) => (
     <Top {...handleProps}>
       <TitleEditable
         title={section.title}
         onAccept={onChangeTitle}
       />
-      {!lessons.length ? (
+      {!lessonsIds.length ? (
         <Button
           style={{marginLeft: 'auto'}}
           type="text"
@@ -86,7 +83,7 @@ const Section = ({
           style={{marginLeft: 'auto'}}
           type="secondary"
         >
-          {lessons.length} {lessons.length > 1 ? 'lecciones' : 'lección'}
+          {lessonsIds.length} {lessonsIds.length > 1 ? 'lecciones' : 'lección'}
         </Text>
       )}
     </Top>
@@ -114,10 +111,11 @@ const Section = ({
                 {...provided.droppableProps}
                 isDraggingOver={snapshot.isDraggingOver}
               >
-                {lessons.map((lesson, index) => (
+                {lessonsIds.map((lessonId, index) => (
                   <Lesson
-                    key={lesson.id}
-                    lesson={lesson}
+                    key={lessonId}
+                    lessonId={lessonId}
+                    lesson={lessons[lessonId]}
                     index={index}
                     dragDisabled={dragDisabled}
                     onDelete={() => onDeleteLesson(index)}
