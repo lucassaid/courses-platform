@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
 import { Container } from './section'
+import { Image } from 'antd'
 import styles from './headerImage.module.css'
 
-const HeaderImage = ({src, alt}) => {
-
+const HeaderImage = ({image, alt}) => {
+  const src = image && image.url
   const [imageStyle, setImageStyle] = useState({})
   const [imageLoaded, setImageLoaded] = useState(false)
   const ref = useRef(null)
@@ -18,7 +19,6 @@ const HeaderImage = ({src, alt}) => {
 
   const imageLoad = e => {
     setImageLoaded(true)
-    setImageStyle({})
   }
 
   return(
@@ -27,13 +27,17 @@ const HeaderImage = ({src, alt}) => {
       className={styles.container}
     >
       <Container>
-        <img
-          ref={ref}
-          onLoad={imageLoad}
-          className={styles.img}
-          src={src}
-          alt={alt}
-        />
+        <div ref={ref}>
+          <Image
+            onLoad={imageLoad}
+            className={styles.img}
+            src={src}
+            alt={alt}
+            placeholder={
+              image && <img src={image.placeholder}/>
+            }
+          />
+        </div>
       </Container>
       <div 
         style={{backgroundImage: `url(${src})`}}

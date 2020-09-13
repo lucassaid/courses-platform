@@ -2,11 +2,11 @@ import { useState } from 'react'
 import { Upload } from 'antd';
 import { storage, auth } from '../firebase/index'
 import axios from 'axios'
+import createPlaceholder from '../lib/create-placeholder'
 
 const CustomUpload = ({ path = '', children, limit, hideUploaded, ...props}) => {
 
   const [fileList, setFileList] = useState(props.fileList || [])
-  const [filesURLs, setFilesURLs] = useState({})
 
   const uploadImage = async options => {
     const { onSuccess, onError, file, onProgress } = options;
@@ -42,9 +42,9 @@ const CustomUpload = ({ path = '', children, limit, hideUploaded, ...props}) => 
       auth.signOut() // logout
     }, async () => {
       const downloadURL = await uploadTask.snapshot.ref.getDownloadURL()
-      setFilesURLs({[file.uid]: downloadURL})
-      onSuccess()
-      auth.signOut() // logout
+      const placeholder = await createPlaceholder(file)
+      await auth.signOut() // logout
+      onSuccess({placeholder, downloadURL})
     });
   }
 
@@ -53,17 +53,14 @@ const CustomUpload = ({ path = '', children, limit, hideUploaded, ...props}) => 
       newFileList = newFileList.slice(-limit)
     }
     let formatedFileList = newFileList.map(file => {
-      const url = filesURLs[file.uid]
-      if(!url) return file
+      if(file.status != 'done') return file
       return {
-        uid: file.uid,
-        name: file.name,
-        url,
-        status: 'done'
+        ...file,
+        url: file.response.downloadURL,
+        placeholder: file.response.placeholder
       }
     })
     props.onChange && props.onChange(formatedFileList)
-    
     if(hideUploaded) {
       formatedFileList = formatedFileList.filter(file => file.status != 'done')
     }
@@ -76,6 +73,7 @@ const CustomUpload = ({ path = '', children, limit, hideUploaded, ...props}) => 
       customRequest={uploadImage}
       fileList={fileList}
       onChange={onChange}
+      accept="image/*"
     >
       {children}
     </Upload>

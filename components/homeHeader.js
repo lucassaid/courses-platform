@@ -1,4 +1,4 @@
-import { Carousel } from 'antd'
+import { Carousel, Image } from 'antd'
 import useSWR from 'swr'
 import styles from './homeHeader.module.css'
 
@@ -14,9 +14,15 @@ const HomeHeader = ({}) => {
       <Carousel autoplay>
         {slides ? slidesArr.map(slide => (
           <div key={slide.uid}>
-            <div
-              style={{backgroundImage: `url(${slide.url})`}}
+            <Image
+              src={slide.url}
               className={styles.content}
+              placeholder={
+                <img
+                  className={`${styles.content} ${styles.placeholder}`}
+                  src={slide.placeholder}
+                />
+              }
             />
           </div>
         )):(

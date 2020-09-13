@@ -79,7 +79,7 @@ export default function CourseOverview() {
       </Head>
 
       <HeaderImage
-        src={course.id && course.cover[0].url}
+        image={course.id && course.cover[0]}
         alt={course.name}
       />
 

@@ -9,7 +9,7 @@
   "dependencies": {
     "@nano-sql/core": "^2.3.7",
     "@reduxjs/toolkit": "^1.4.0",
-    "antd": "^4.5.4",
+    "antd": "^4.6.4",
     "antd-img-crop": "^3.10.0",
     "axios": "^0.20.0",
     "cookie": "^0.4.1",

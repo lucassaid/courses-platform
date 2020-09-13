@@ -1,7 +1,9 @@
 .content {
   width: 100%;
   height: 500px;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
+}
+
+.placeholder {
+  filter: blur(4px);
+  transform: scale(1.2);
 }
