@@ -31,7 +31,11 @@ export default async function (req, res) {
   
     } else if(req.method === 'POST') {
       if(!user.admin) throw new Error('Permission denied')
-      const r = await add({...req.body.course, published: false}, config)
+      const r = await add({
+        ...req.body.course,
+        published: false,
+        archived: false
+      }, config)
       res.status(200).send(r)
 
     } else if(req.method === 'GET') {
