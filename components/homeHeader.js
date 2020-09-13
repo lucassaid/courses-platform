@@ -17,6 +17,7 @@ const HomeHeader = ({}) => {
             <Image
               src={slide.url}
               className={styles.content}
+              preview={false}
               placeholder={
                 <img
                   className={`${styles.content} ${styles.placeholder}`}

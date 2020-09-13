@@ -29,7 +29,7 @@ const functionsCreator = ({firebase, firestore}) => {
     try {
       doc.createdAt = firebase.firestore.Timestamp.now()
       const newDoc = await getRef(config).add(doc)
-      return {[newDoc.id]: doc}
+      return {...doc, id: newDoc.id}
     } catch(e) {
       throw e
     }

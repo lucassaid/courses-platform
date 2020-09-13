@@ -33,6 +33,7 @@ const HeaderImage = ({image, alt}) => {
             className={styles.img}
             src={src}
             alt={alt}
+            preview={false}
             placeholder={
               image && <img src={image.placeholder}/>
             }

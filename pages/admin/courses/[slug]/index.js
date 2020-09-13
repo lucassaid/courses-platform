@@ -20,22 +20,35 @@ const CourseOverview = () => {
   const { data: course = {}, error } = useSWR(`/api/courses/${slug}`, fetcher)
   const { data: lessons = {}, error: lessonsError } = useSWR(() =>`/api/courses/lessons?courseId=${course.id}`, fetcher)
   const [updatingCourse, setUpdatingCourse] = useState(false)
+
+  const updateCourse = async (updateObj, config, type) => {
+    setUpdatingCourse(true)
+    await mutate('/api/courses', async courses => {
+      await axios.put(`/api/courses`, {courses: {[course.id]: updateObj}})
+      let updatedCourses = {
+        ...courses,
+        [course.id]: { ...course, ...updateObj}
+      }
+      if(type == 'delete') {
+        delete updatedCourses[course.id]
+      }
+      return updatedCourses
+    })
+    await mutate(`/api/courses/${course.slug}`, {...course, ...updateObj})
+    message.success({ content: config.onCompleteText, duration: 1 });
+    setUpdatingCourse(false)
+  } 
   
   const handlePublish = async () => {
-    setUpdatingCourse(true)
-    await axios.put(`/api/courses`, {courses: {[course.id]: {published: !course.published}}})
-    mutate(`/api/courses/${slug}`, {...course, published: !course.published})
-    setUpdatingCourse(false)
+    const updateObj = {published: !course.published}
+    await updateCourse(updateObj, {onCompleteText: 'Curso publicado!'})
   }
-
+  
   const deleteCourse = async () => {
-    // this only sets 'archived' = true
-    setUpdatingCourse(true)
-    await axios.put(`/api/courses`, {courses: {[course.id]: {archived: true}}})
-    mutate(`/api/courses/${slug}`, {...course, archived: true})
-    message.success({ content: 'Curso eliminado', duration: 1 });
+    // set 'archived' = true
+    const updateObj = {archived: true, slug: false}
+    await updateCourse(updateObj, {onCompleteText: 'Curso eliminado'}, 'delete')
     router.push('/admin/courses/')
-    setUpdatingCourse(false)
     return 'ok'
   }
 

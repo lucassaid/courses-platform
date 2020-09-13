@@ -124,11 +124,11 @@ const ContentBoard = ({course, lessons, selectedLesson, }) => {
     updateNewLessonModal('loading', true)
 
     // save
-    const { data } = await axios.post(`/api/courses/lessons?courseId=${courseId}`, {lesson: {title}})
+    const { data: lesson } = await axios.post(`/api/courses/lessons?courseId=${courseId}`, {lesson: {title}})
     mutate(`/api/courses/lessons?courseId=${courseId}`)
     
     // update
-    const newLessonId = Object.keys(data)[0]
+    const newLessonId = lesson.id
     const sectionId = newLessonModal.addTo
     dispatch({type: 'add-lesson', payload: { newLessonId, sectionId}})
 
