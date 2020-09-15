@@ -39,6 +39,27 @@ const WhyToBuyList = ({icon, text}) => {
   )
 }
 
+const Price = ({price, oldPrice}) => (
+  <>
+    {oldPrice && (
+      <div style={{marginTop: 10}}>
+        <Text style={{textDecoration: 'line-through', fontSize: '1.2rem'}} type="secondary">
+          ${oldPrice}
+        </Text>
+      </div>
+    )}
+    <Title 
+      style={{
+        fontWeight: 300,
+        margin: '10px 0',
+        marginTop: oldPrice ? 0 : 10
+      }}
+    >
+      ${price}
+    </Title>
+  </>
+)
+
 const fetcher = url => fetch(url).then(r => r.json())
 
 export default function CourseOverview() {
@@ -51,7 +72,7 @@ export default function CourseOverview() {
   const buyCard = (
     <Card loading={!course.id}>
       <Text type="secondary">¡Comprá ahora!</Text>
-      <Title style={{fontWeight: 300, margin: '10px 0'}} >${course.price}</Title>
+      <Price price={course.price} oldPrice={course.old_price}/>
       {course.paylink && (
         <a href={course.paylink}>
           <Button

@@ -18,14 +18,14 @@ export default async function (req, res) {
     const config = {path: ['customization', 'home']}
 
     if(req.method === 'PUT') {
-      // expects an object with all slides to update, ej{<slideId>: {name: 'foo'}}
+      // expects an object with all testimonials to update, ej{<slideId>: {name: 'foo'}}
       if(!user.admin) throw new Error('Permission denied')
-      await update({slides: req.body.slides}, config)
+      await update({testimonials: req.body.testimonials}, config)
       res.status(200).send('ok')
   
     }  else if(req.method === 'GET') {
       const homeDoc = await getDoc('home', {path: ['customization']})
-      res.send(homeDoc['home'].slides || {})
+      res.send(homeDoc['home'].testimonials || {})
     }
   } catch(err) {
     console.log(err)

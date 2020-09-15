@@ -3,6 +3,7 @@ import { Upload } from 'antd';
 import { storage, auth } from '../firebase/index'
 import axios from 'axios'
 import createPlaceholder from '../lib/create-placeholder'
+import { Avatar, Popconfirm, Progress } from 'antd'
 
 const CustomUpload = ({ path = '', children, limit, hideUploaded, ...props}) => {
 
@@ -67,7 +68,7 @@ const CustomUpload = ({ path = '', children, limit, hideUploaded, ...props}) => 
     setFileList(formatedFileList);
   }
 
-  return(
+  const upload = (
     <Upload 
       {...props}
       customRequest={uploadImage}
@@ -77,6 +78,22 @@ const CustomUpload = ({ path = '', children, limit, hideUploaded, ...props}) => 
     >
       {children}
     </Upload>
+  )
+
+  if(!props.avatar || !fileList.length ) return upload
+
+  return(
+    <>
+      {!fileList[0].url && <Progress percent={fileList[0].percent} status="active"/>}
+      
+      <Popconfirm
+        title="Eliminar imagen?"
+        okText="Si, eliminar"
+        onConfirm={() => setFileList([])}
+      >
+        <Avatar src={fileList[0].url} size="large"/>
+      </Popconfirm>
+    </>
   )
 }
 export default CustomUpload

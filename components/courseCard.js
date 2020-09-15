@@ -23,7 +23,7 @@ const CourseCard = ({children, actions, title, extra, course = {}, showMp, loadi
       loading={loading}
       cover={cover}
       actions={actions}
-      bodyStyle={{paddingBottom: 70}}
+      bodyStyle={{paddingBottom: course.old_price ? 100 : 70}}
     >
       <Meta
         title={course.name}
@@ -31,7 +31,14 @@ const CourseCard = ({children, actions, title, extra, course = {}, showMp, loadi
       />
       
       <div className={styles.bottom}>
-        <Text className={styles.price} type="secondary">${course.price}</Text>
+        <div>
+          {course.old_price && (
+            <div>
+              <Text className={styles.oldPrice} type="secondary">${course.old_price}</Text>
+            </div>
+          )}
+          <Text className={styles.price} type="secondary">${course.price}</Text>
+        </div>
         {showMp && (
           <img
             style={{width: 30}}

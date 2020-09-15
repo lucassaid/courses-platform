@@ -36,3 +36,5 @@ yarn-error.log*
 .env
 
 service-account.json
+
+report*.json
