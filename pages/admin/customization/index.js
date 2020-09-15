@@ -1,5 +1,5 @@
 import AdminLayout from '../../../components/adminLayout'
-import { PageHeader, message, Button, Table, Avatar, Row, Col, Card } from 'antd'
+import { PageHeader, message, Empty, Button, Table, Avatar, Row, Col, Card, Badge } from 'antd'
 import HeaderSlides from '../../../components/headerSlides'
 import Testimonials from '../../../components/testimonials'
 
@@ -44,12 +44,15 @@ const Customization = () => {
           </Card>
         </Col>
         <Col xs={24} md={12}>
+        <Badge.Ribbon text="Próximamente">
           <Card title="Testimoniales">
-            <Testimonials 
+            {/* <Testimonials 
               testimonials={testimonials}
               onSave={(obj) => onSave('testimonials', obj, 'testimonials')}
-            />
+            /> */}
+            <Empty description=""/>
           </Card>
+        </Badge.Ribbon>
         </Col>
       </Row>
 

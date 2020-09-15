@@ -34,7 +34,8 @@ export default async function (req, res) {
       const r = await add({
         ...req.body.course,
         published: false,
-        archived: false
+        archived: false,
+        order: -1
       }, config)
       res.status(200).send(r)
 

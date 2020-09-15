@@ -30,8 +30,8 @@ const LessonDetail = ({courseId, lesson}) => {
   const dispatch = useDispatch()
 
   const uploads = useSelector(selectUploadsObj)
-  const fileId = lesson.id + '_file'
-  const uploadingFile =  uploads[fileId]
+  const uploadId = lesson.id + '_file'
+  const uploadingFile =  uploads[uploadId]
   const [title, setTitle] = useState('')
   const [notes, setNotes] = useState('')
   const legibleType = lesson.type == 'video' ? 'Video' : 'Práctica'
@@ -54,8 +54,9 @@ const LessonDetail = ({courseId, lesson}) => {
 
   const uploadCustomRequest = async info => {
     const path = `courses/${courseId}/files/` // only used if file is pdf
-    await dispatch(uploadFile(fileId, info.file, path))
-    const { uri } = store.getState().uploads[fileId]
+    const name = `${info.file.name}_${lesson.id}_${Date.now()}`
+    await dispatch(uploadFile(uploadId, info.file, path + name))
+    const { uri } = store.getState().uploads[uploadId]
     updateLesson({uri})
   }
 

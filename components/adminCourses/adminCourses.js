@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
 import CoursesList from './coursesList'
 import { message } from 'antd'
@@ -46,6 +46,15 @@ const AdminCourses = ({courses}) => {
     setIds(newIds)
     saveOrder(newIds, setDragDisabled)
   }
+
+  useEffect(() => {
+    for(let id in courses) {
+      if(courses[id].order == -1) {
+        // a new course was created, save new order
+        saveOrder(ids, setDragDisabled)
+      }
+    }
+  }, [])
 
   return (
     <>

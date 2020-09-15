@@ -2,6 +2,7 @@ import { Form, Input, Button, InputNumber, Card} from 'antd';
 import UploadWithCrop from './uploadWithCrop'
 import { UploadOutlined } from '@ant-design/icons';
 import slug from 'limax'
+import axios from 'axios'
 
 const { TextArea } = Input;
 
@@ -25,6 +26,19 @@ const CourseForm = ({onFinish, initialValues}) => {
     if(Object.keys(values)[0] === 'name') {
       form.setFieldsValue({slug: slug(values.name)})
     }
+  }
+
+  const validateSlug = (_, value) => {
+    return new Promise(async (res, rej) => {
+      if(value != slug(value)) rej('Formato no válido')
+      const { data: courseWithSameSlug } = await axios.get(`/api/courses/${value}`)
+      const editingCourseId = initialValues && initialValues.id
+      if(!courseWithSameSlug.id || courseWithSameSlug.id == editingCourseId) {
+        res('ok')
+      } else {
+        rej('Este link ya es usado por otro curso!')
+      }
+    })
   }
 
   return(
@@ -96,7 +110,12 @@ const CourseForm = ({onFinish, initialValues}) => {
         <Form.Item
           name="slug"
           label="Link"
-          rules={[{ required: true }]}
+          rules={[
+            { 
+              required: true,
+              validator: validateSlug
+            }
+          ]}
         >
           <Input addonBefore="ameliejulieta.com/"/>
         </Form.Item>
