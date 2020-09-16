@@ -133,14 +133,6 @@ const CourseOverview = () => {
           <Badge.Ribbon text="Proximamente!" placement="end">
             <Card
               title="Lecciones"
-              extra={
-                <Link
-                  href="/admin/courses/[slug]/lessons"
-                  as={`/admin/courses/${course.slug}/lessons`}
-                >
-                  <a>Editar</a>
-                </Link>
-              }
             >
               <LessonsPreview
                 sections={course.sections}

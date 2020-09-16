@@ -5,7 +5,6 @@ import { Avatar, Row, Col, Typography } from 'antd'
 import CoursesList from '../components/coursesList'
 import utilStyles from '../styles/utils.module.css'
 import HomeHeader from '../components/homeHeader'
-// import getHomeSlides from '../lib/home'
 
 const { Title, Paragraph, Text } = Typography;
 

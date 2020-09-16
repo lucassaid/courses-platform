@@ -13,7 +13,6 @@ const HomeHeader = ({}) => {
   const slidesArr = Object.values(slides).sort((a, b) => a.order - b.order)
 
   const onLoad = () => {
-    console.log("LOAD")
     setImageLoaded(true)
   }
 
