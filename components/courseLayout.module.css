@@ -16,10 +16,12 @@
   height: 60px;
   display: flex;
   align-items: center;
+  background-color: rgb(62, 62, 80);
+  color: white;
 }
 
 .sider {
-  overflow: auto;
+  /* overflow: auto; */
   height: 100vh;
   position: fixed;
   z-index: 2;

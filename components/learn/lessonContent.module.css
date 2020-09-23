@@ -1,0 +1,14 @@
+.iframe {
+  width: 100%;
+  height: calc(100vh - 147px);
+  max-height: 500px;
+}
+
+.pdf {
+  width: 100%;
+}
+
+.pdfTop {
+  text-align: right;
+  margin-bottom: 10px;
+}

@@ -1,8 +1,11 @@
 import styled, {css} from 'styled-components'
 import { Draggable } from 'react-beautiful-dnd'
-import { Button, Popconfirm } from 'antd'
+import { Button, Popconfirm, Typography } from 'antd'
 import { MenuOutlined, DeleteOutlined } from '@ant-design/icons'
 import Link from 'next/link'
+import LessonTypeIcon from '../lessonTypeIcon'
+
+const { Text } = Typography
 
 const Container = styled.div`
   display: flex;
@@ -35,8 +38,11 @@ const linkStyles = {
   width: '100%',
   height: '34px',
   display: 'flex',
-  display: 'flex',
   alignItems: 'center',
+  whiteSpace: 'nowrap',
+  textOverflow: 'ellipsis',
+  overflow: 'hidden',
+  marginRight: 15
 }
 
 const Lesson = ({
@@ -76,6 +82,14 @@ const Lesson = ({
               {lesson && lesson.title}
             </a>
           </Link>
+          <LessonTypeIcon
+            style={{
+              fontSize: 17,
+              opacity: 0.5,
+              marginRight: 10
+            }}
+            type={lesson.type}
+          />
           <Popconfirm
             title="¿Borrar lección?"
             onConfirm={onDelete}
@@ -86,7 +100,6 @@ const Lesson = ({
               type="text"
               icon={<DeleteOutlined/>}
               style={{
-                marginLeft: 'auto',
                 color: selected ? 'white' : 'inherit'
               }}
             />

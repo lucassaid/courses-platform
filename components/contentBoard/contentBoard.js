@@ -30,11 +30,22 @@ const initialModalState =  {
   loading: false
 }
 
+// create an ordered array with all the courses Id's
+const getLessonsOrder = ({sections, sectionsOrder}) => {
+  let result = []
+  for(const sectionId of sectionsOrder) {
+    const section = sections[sectionId]
+    section.lessonsIds.forEach(id => result.push(id))
+  }
+  return result
+}
+
 const saveCourse = async (updateObj, courseId, setDragDisabled) => {
   try {
     setDragDisabled(true)
     message.loading({ content: 'Guardando...', key: 'saving' })
-    await axios.put(`/api/courses/`, {courses: {[courseId]: updateObj}})
+    const lessonsOrder = getLessonsOrder(updateObj)
+    await axios.put(`/api/courses/`, {courses: {[courseId]: { ...updateObj, lessonsOrder }}})
     message.success({ content: 'Cambios guardados', key: 'saving', duration: 1 });
   } catch(e) {
     message.error({ content: 'Error al guardar los cambios', key: 'saving', duration: 2 });
@@ -60,7 +71,7 @@ const ContentBoard = ({course, lessons, selectedLesson, }) => {
   const [newLessonModal, setNewLessonModal] = useState(initialModalState)
   
   const [content, dispatch] = useReducer(sectionsReducer, course, init)
-  const {sections, sectionsOrder, changedByUser} = content
+  const {sections, sectionsOrder } = content
 
   useEffect(() => {
     const {sections, sectionsOrder, changedByUser} = content

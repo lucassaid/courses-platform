@@ -1,7 +1,18 @@
-import { Document, Page, pdfjs } from 'react-pdf';
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+import dynamic from 'next/dynamic'
+
+const Document = dynamic(
+  import('../pdf').then(m => m.Document),
+  { ssr: false }
+)
+
+const Page = dynamic(
+  import('../pdf').then(m => m.Page),
+  { ssr: false }
+)
+
 
 const LessonPreview = ({type, uri}) => {
+
 
   return (
     <div style={{marginTop: 5}}>
@@ -18,7 +29,7 @@ const LessonPreview = ({type, uri}) => {
       ) : (
         <div style={{width: '100%', height: 300, overflow:'auto'}}>
           <Document file={uri}>
-            <Page pageNumber={1}/>
+            <Page scale={0.7} pageNumber={1}/>
           </Document>
         </div>
       )}

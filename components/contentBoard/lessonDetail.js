@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { Upload, message, Input, Card, Button, Typography, Popconfirm } from 'antd';
-import { InboxOutlined } from '@ant-design/icons';
+import { Upload, message, Input, Card, Button, Typography, Popconfirm, Modal } from 'antd';
+import { InboxOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux'
 import { uploadFile, selectUploadsObj} from '../../lib/slices/uploadsSlice'
 import UploadingFile from '../uploadingFile';
@@ -9,8 +9,9 @@ import LessonTypeIcon from '../lessonTypeIcon'
 import store from '../../store'
 import axios from 'axios'
 import { mutate } from 'swr'
+import styles from './lessonDetail.module.css'
 
-const { Text } = Typography;
+const { Text, Title } = Typography;
 const { TextArea } = Input
 const { Dragger } = Upload;
 
@@ -70,6 +71,7 @@ const LessonDetail = ({courseId, lesson}) => {
 
   return (
     <>
+      <Title level={3}>{lesson.title}</Title>
       <Card title="General">
         <Text><label htmlFor="title">Título</label></Text>
         <Input

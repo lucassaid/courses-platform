@@ -1,0 +1,11 @@
+.lessonContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.bottom {
+  margin: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
 import Head from 'next/head'
-import { Layout, Menu, Button, Drawer } from 'antd';
+import { Layout, Menu, Button, Drawer, Typography } from 'antd';
 import { OrderedListOutlined } from '@ant-design/icons';
 import styles from './courseLayout.module.css'
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu
+const { Title } = Typography
 
 export const siteTitle = 'Juli Amelie'
 
@@ -39,7 +40,7 @@ export default function CourseLayout({ children, menu, title, drawerTitle }) {
             placement="left"
             onClose={() => setDrawerOpened(false)}
             visible={drawerOpened}
-            bodyStyle={{padding: 0}}
+            bodyStyle={{padding: 0, overflow: 'hidden'}}
           >
             {menu}
           </Drawer>
@@ -63,10 +64,19 @@ export default function CourseLayout({ children, menu, title, drawerTitle }) {
               icon={<OrderedListOutlined style={{fontSize: '1.5rem'}}/>}
               onClick={() => setDrawerOpened(true)}
             />
-            {title}
+            <Title
+              ellipsis={{ rows: 1, expandable: false}}
+              level={4}
+              style={{
+                color: 'white',
+                margin: '0 10px'
+              }}
+            >
+              {title}
+            </Title>
           </Header>
           <Content className={styles.content}>
-            <main>
+            <main style={{overflow: 'hidden'}}>
               {children}
             </main>
           </Content>

@@ -1,20 +1,26 @@
 import admin from '../../firebase/admin'
-import { getDoc } from '../../firebase/admin-functions'
+import { getDoc, update } from '../../firebase/admin-functions'
 
 export default async function (req, res) {
   try {
     const sessionCookie = req.cookies.session || '';
-    // Verify the session cookie. In this case an additional check is added to detect
-    // if the user's Firebase session was revoked, user deleted/disabled, etc.
-    const decodedClaims = await admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */)
-
-    // get all other user data with uid
+    const decodedClaims = await admin.auth().verifySessionCookie(sessionCookie, true)
     const { uid } = decodedClaims
-    admin.auth().setCustomUserClaims(uid, {admin: true})
     const userDoc = await getDoc(uid, {path: ['users']})
-    res.send({user: {...userDoc[uid], ...decodedClaims}})
+    
+    if(req.method === 'GET') {
+      res.send({user: {...userDoc[uid], ...decodedClaims}})
+      // get all firestore user data with uid
+      
+    } else if(req.method === 'PUT') {
+      // TODO secure this in rules
+      // const config = {path: ['users', uid]}
+      // await update(req.body.user, config)
+      // res.send({...userDoc[uid], ...req.body.user})
+
+    }
   } catch(err) {
-    console.log("Error verifying cookie", err)
+    console.log("Error in user", req.method, err)
     res.status(403).send(err)
   }
 }
