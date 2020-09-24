@@ -1,5 +1,5 @@
 import admin from '../../../firebase/admin'
-import { getDoc, update } from '../../../firebase/admin-functions'
+import { getList, update, add } from '../../../firebase/admin-functions'
 
 const verifyUser = async req => {
   try {
@@ -15,17 +15,30 @@ const verifyUser = async req => {
 export default async function (req, res) {
   try {
     const user = await verifyUser(req)
-    const config = {path: ['customization', 'home']}
+    const config = {path: ['customization', 'home', 'testimonials']}
 
-    if(req.method === 'PUT') {
-      // expects an object with all testimonials to update, ej{<slideId>: {name: 'foo'}}
+    if(req.method === 'POST') {
       if(!user.admin) throw new Error('Permission denied')
-      await update({testimonials: req.body.testimonials}, config)
-      res.status(200).send('ok')
+      const doc = {...req.body.testimonial, deleted: false}
+      const newTestimonial = await add(doc, config)
+      res.status(200).send(newTestimonial)
+
+    } else if(req.method === 'PUT') {
+      if(!user.admin) throw new Error('Permission denied')
+      config.path.push(req.body.testimonial.id)
+      await update(req.body.testimonial, config)
+      res.status(200).send(req.body.testimonial)
   
-    }  else if(req.method === 'GET') {
-      const homeDoc = await getDoc('home', {path: ['customization']})
-      res.send(homeDoc['home'].testimonials || {})
+    } else if(req.method === 'GET') {
+      config.wheres = [['deleted', '==', false]]
+      const testimonialsList = await getList(config)
+      res.send(testimonialsList)
+
+    } else if(req.method === 'DELETE') {
+      if(!user.admin) throw new Error('Permission denied')
+      config.path.push(req.query.id)
+      await update({deleted: true}, config)
+      res.status(200).send('ok')
     }
   } catch(err) {
     console.log(err)

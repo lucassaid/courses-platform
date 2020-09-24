@@ -5,6 +5,7 @@ import { Avatar, Row, Col, Typography } from 'antd'
 import CoursesList from '../components/coursesList'
 import utilStyles from '../styles/utils.module.css'
 import HomeHeader from '../components/homeHeader'
+import TestimonialsCarousel from '../components/testimonialsCarousel'
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -75,7 +76,18 @@ const IndexPage = ({slides}) => {
             ¿Estás lista para tomar acción?
           </Text>
         </div>
-        <CoursesList></CoursesList>
+        <CoursesList/>
+        
+      </Section>
+
+      <Section bg bgSoft>
+        <div style={{marginBottom: 50}}>
+          <Title style={{fontFamily: "'Pacifico', cursive", fontWeight: 100}}>¡Vos también podés!</Title>
+          {/* <Text type="secondary">
+            Testimoniales
+          </Text> */}
+        </div>
+        <TestimonialsCarousel/>
         
       </Section>
     </Layout>

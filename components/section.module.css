@@ -39,3 +39,11 @@
 .sectionBgHigh::before {
   height: 180%;
 }
+
+.sectionBgSoft::before {
+  background-color: #e7e7e7;
+}
+
+.sectionBgSoft div {
+  color: inherit;
+}

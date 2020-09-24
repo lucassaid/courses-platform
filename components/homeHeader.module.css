@@ -3,7 +3,6 @@
   height: 500px;
   display: flex;
   align-items: center;
-  height: 500px;
 }
 
 .image {
@@ -16,4 +15,16 @@
   filter: blur(4px);
   transform: scale(1.2);
   position: absolute;
+}
+
+@media(max-width: 900px) {
+  .content {
+    height: 400px;
+  }
+}
+
+@media(max-width: 767px) {
+  .content {
+    height: 280px;
+  }
 }

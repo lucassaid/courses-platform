@@ -1,5 +1,5 @@
 import { Form, Input, Button, Popconfirm } from 'antd';
-import UploadWithCrop from './uploadWithCrop'
+import UploadWithCrop from '../uploadWithCrop'
 import { DeleteOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import styles from './testimonials.module.css'
 

@@ -47,7 +47,7 @@ const HomeHeader = ({}) => {
             </div>
           </div>
         )):(
-          <div>
+          <div key="empty">
             <div className={styles.image}></div>
           </div>
         )}

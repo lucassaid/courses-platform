@@ -5,6 +5,10 @@ import useSWR from 'swr'
 
 const fetcher = url => fetch(url).then(r => r.json())
 
+const getOrderedCourses = courses => {
+  return Object.values(courses).sort((a, b) => a.order - b.order)
+}
+
 const CoursesList = () => {
 
   const { data, error } = useSWR('/api/courses?hideUnpublished=true', fetcher)
@@ -13,7 +17,7 @@ const CoursesList = () => {
   if (!data) return <div>loading...</div>
 
   const courses = data ? (
-    Object.keys(data).map(id => ({...data[id], id})) 
+    getOrderedCourses(data)
   ): [{},{},{},{},{},{}]
 
   return(

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
-import { Layout, Menu, Button, Drawer, Card, Avatar, Badge } from 'antd';
+import { Layout, Menu, Button, Drawer, Card, Avatar, Badge, Spin } from 'antd';
 import {
   AppstoreOutlined,
   HomeOutlined,
@@ -65,6 +65,24 @@ const AdminMenu = ({page}) => {
   )
 }
 
+const loading = (
+  <>
+    <div className="container">
+      <Spin size="large"/>
+    </div>
+    <style jsw>{`
+      .container {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        justify-content: center;
+        align-items: center;
+      }
+    `}</style>
+  </>
+)
+
 export default function AdminLayout({ children, page }) {
 
   const [uploadsVisible, setUploadsVisible] = useState(false)
@@ -98,7 +116,7 @@ export default function AdminLayout({ children, page }) {
 
   const {user, error} = useUser(true)
 
-  if(!user) return 'Cargando...'
+  if(!user) return loading
 
   const menuFooter = (
     <Meta

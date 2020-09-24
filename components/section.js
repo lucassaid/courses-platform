@@ -15,6 +15,7 @@ const Section = ({
   bg,
   bgMirror,
   bgHigh,
+  bgSoft,
   style = {},
   className = '',
   ...props
@@ -23,7 +24,8 @@ const Section = ({
   let bgClassName = bg ? styles.sectionBg : '' 
   if(bgMirror) bgClassName += ` ${styles.sectionBgMirror}`
   if(bgHigh) bgClassName += ` ${styles.sectionBgHigh}`
-  let fullClass = `${bgClassName} ${styles.section} ${utilStyles.mb20} ${className}`
+  if(bgSoft) bgClassName += ` ${styles.sectionBgSoft}`
+  const fullClass = `${bgClassName} ${styles.section} ${utilStyles.mb20} ${className}`
 
   return (
     <section 

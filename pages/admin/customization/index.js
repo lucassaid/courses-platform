@@ -1,8 +1,7 @@
 import AdminLayout from '../../../components/adminLayout'
 import { PageHeader, message, Empty, Button, Table, Avatar, Row, Col, Card, Badge } from 'antd'
 import HeaderSlides from '../../../components/headerSlides'
-import Testimonials from '../../../components/testimonials'
-
+import AdminTestimonials from '../../../components/adminTestimonials'
 import useSWR, {mutate} from 'swr'
 import axios from 'axios'
 
@@ -44,15 +43,9 @@ const Customization = () => {
           </Card>
         </Col>
         <Col xs={24} md={12}>
-        <Badge.Ribbon text="Próximamente">
           <Card title="Testimoniales">
-            {/* <Testimonials 
-              testimonials={testimonials}
-              onSave={(obj) => onSave('testimonials', obj, 'testimonials')}
-            /> */}
-            <Empty description=""/>
+            <AdminTestimonials testimonials={testimonials}/>
           </Card>
-        </Badge.Ribbon>
         </Col>
       </Row>
 
