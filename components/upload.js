@@ -68,31 +68,20 @@ const CustomUpload = ({ path = '', children, limit, hideUploaded, ...props}) => 
     setFileList(formatedFileList);
   }
 
-  const upload = (
-    <Upload 
-      {...props}
-      customRequest={uploadImage}
-      fileList={fileList}
-      onChange={onChange}
-      accept="image/*"
-    >
-      {children}
-    </Upload>
-  )
-
-  if(!props.avatar || !fileList.length ) return upload
-
-  return(
+  return (
     <>
-      {!fileList[0].url && <Progress percent={fileList[0].percent} status="active"/>}
-      
-      <Popconfirm
-        title="Eliminar imagen?"
-        okText="Si, eliminar"
-        onConfirm={() => setFileList([])}
+      <Upload 
+        {...props}
+        customRequest={uploadImage}
+        fileList={fileList}
+        onChange={onChange}
+        accept="image/*"
       >
-        <Avatar src={fileList[0].url} size="large"/>
-      </Popconfirm>
+        {children}
+      </Upload>
+      <div style={{marginTop: 10}}>
+        {props.extra}
+      </div>
     </>
   )
 }

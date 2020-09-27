@@ -55,6 +55,7 @@ const SlideForm = ({onFinish, initialValues = defaultValues}) => {
             name="mobileImage"
             valuePropName="fileList"
             getValueFromEvent={normFile}
+            extra="Tamaño recomendado: 850 x 650"
           >
             <Upload
               listType="picture"
@@ -71,6 +72,7 @@ const SlideForm = ({onFinish, initialValues = defaultValues}) => {
             name="desktopImage"
             valuePropName="fileList"
             getValueFromEvent={normFile}
+            extra="Tamaño recomendado: 1920 x 500"
           >
             <Upload
               listType="picture"
@@ -145,6 +147,7 @@ const SlideForm = ({onFinish, initialValues = defaultValues}) => {
                 name="contentImage"
                 valuePropName="fileList"
                 getValueFromEvent={normFile}
+                extra="Preferentemente en formato 'svg'"
               >
                 <Upload
                   listType="picture"
