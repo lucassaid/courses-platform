@@ -4,9 +4,10 @@ import TestimonialModal from './testimonialModal'
 import { PlusOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import axios from 'axios'
-import { mutate } from 'swr'
+import useSWR, { mutate } from 'swr'
 
 const api = '/api/customization/testimonials'
+const fetcher = url => fetch(url).then(r => r.json())
 
 const addOrUpdate = async (testimonial, type) => {
   return await mutate(api, async currentTestimonials => {
@@ -24,7 +25,10 @@ const addOrUpdate = async (testimonial, type) => {
   })
 }
 
-const AdminTestimonials = ({testimonials}) => {
+const AdminTestimonials = () => {
+
+  const {data: testimonials, error} = useSWR('/api/customization/testimonials', fetcher)
+
 
   const [confirmLoading, setConfirmLoading] = useState(false)
   const [visible, setModalVisible] = useState(false);
@@ -37,7 +41,6 @@ const AdminTestimonials = ({testimonials}) => {
   }
 
   const onUpdate = async testimonial => {
-    console.log(testimonial)
     setConfirmLoading(true)
     await addOrUpdate(testimonial, 'update')
     setConfirmLoading(false)
@@ -70,9 +73,6 @@ const AdminTestimonials = ({testimonials}) => {
         onClick={() => {
           setModalVisible(true);
         }}
-        type="dashed"
-        block
-        icon={<PlusOutlined />}
       >
         Agregar testimonial
       </Button>

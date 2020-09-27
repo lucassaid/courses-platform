@@ -1,14 +1,15 @@
 import styled, {css} from 'styled-components'
 import { Draggable } from 'react-beautiful-dnd'
-import { DeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Popconfirm } from 'antd'
+import Slide from '../homeHeader/slide'
+import { useRouter } from 'next/router'
 
 const Container = styled.div`
   position: relative;
   display: flex;
   align-items: center;
   border: 1px solid transparent;
-  border-bottom-color: #EEE;
   padding: 8px;
   background-color: white;
   ${props => props.isDragging && css`
@@ -17,23 +18,25 @@ const Container = styled.div`
   `}
 `
 
-const Image = styled.img`
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-`
-
-const DeleteButton = styled.div`
+const Buttons = styled.div`
   position: absolute;
   top: 15px;
   right: 15px;
+  z-index: 2;
 `
 
-const CourseItem = ({slide, index, onDelete}) => {
+const SlideItem = ({slide, index, onDelete}) => {
+
+  const router = useRouter()
+
+  const toEdit = () => {
+    const prefix = '/admin/customization/banners'
+    router.push(`${prefix}/[id]`, `${prefix}/${slide.id}`)
+  }
 
   return (
     <Draggable
-      draggableId={slide.uid}
+      draggableId={slide.id}
       index={index}
     >
       {(provided, snapshot) => (
@@ -43,10 +46,10 @@ const CourseItem = ({slide, index, onDelete}) => {
           isDragging={snapshot.isDragging}
           {...provided.dragHandleProps}
         >
-          <Image src={slide.url}/>
-          <DeleteButton>
+          <Slide style={{height: 150}} mode="desktop" slide={slide}/>
+          <Buttons>
             <Popconfirm
-              title="Borrar imagen?"
+              title="Borrar banner?"
               onConfirm={onDelete}
               okText="Si, borrar"
               cancelText="No"
@@ -56,10 +59,16 @@ const CourseItem = ({slide, index, onDelete}) => {
                 shape="circle"
               />
             </Popconfirm>
-          </DeleteButton>
+            <Button
+              style={{marginLeft: 10}}
+              icon={<EditOutlined />}
+              shape="circle"
+              onClick={toEdit}
+            />
+          </Buttons>
         </Container>
       )}
     </Draggable>
   )
 }
-export default CourseItem
+export default SlideItem

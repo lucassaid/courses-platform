@@ -1,0 +1,38 @@
+.slide {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+}
+
+.imageContainer {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 1;
+}
+
+.content {
+  position: absolute;
+  z-index: 2;
+  padding: 5%;
+}
+
+.contentImage {
+  max-width: 600px;
+}
+
+.contentText {
+}

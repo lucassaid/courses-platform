@@ -70,7 +70,7 @@ const loading = (
     <div className="container">
       <Spin size="large"/>
     </div>
-    <style jsw>{`
+    <style jsx>{`
       .container {
         display: flex;
         width: 100%;
