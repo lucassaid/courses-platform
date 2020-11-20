@@ -7,7 +7,6 @@ const verifyUser = async req => {
     const decodedClaims = await admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */)
     return decodedClaims
   } catch(err) {
-    console.log("Cookie error", err)
     return false
   }
 }

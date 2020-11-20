@@ -2,7 +2,6 @@ import Head from 'next/head'
 import Footer from './footer'
 import { Layout } from 'antd';
 import TopBar from './topBar'
-
 const { Content } = Layout;
 
 export const name = 'Juli Amelie'

@@ -1,30 +1,29 @@
 import admin, { firestore as ref } from '../../../firebase/admin'
 import { add, update, getList } from '../../../firebase/admin-functions'
 
-const verifyUser = async req => {
+const verifyAdmin = async req => {
   try {
     const sessionCookie = req.cookies.session || '';
     const decodedClaims = await admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */)
-    return decodedClaims
+    return decodedClaims.admin
   } catch(err) {
-    console.log("Cookie error", err)
     return false
   }
 }
 
 export default async function (req, res) {
   try {
-    const user = await verifyUser(req)
+    const admin = await verifyAdmin(req)
     const config = {path: ['customization', 'home', 'slides']}
 
     if(req.method === 'POST') {
-      if(!user.admin) throw new Error('Permission denied')
+      if(!admin) throw new Error('Permission denied')
       const doc = {...req.body.slide, deleted: false}
       const newTestimonial = await add(doc, config)
       res.status(200).send(newTestimonial)
 
     } else if(req.method === 'PUT') {
-      if(!user.admin) throw new Error('Permission denied')
+      if(!admin) throw new Error('Permission denied')
       const { slide, ids } = req.body
       if(!slide && !ids) throw new Error('Invalid body')
       if(slide) {
@@ -49,7 +48,7 @@ export default async function (req, res) {
       res.send(testimonialsList)
 
     } else if(req.method === 'DELETE') {
-      if(!user.admin) throw new Error('Permission denied')
+      if(!admin) throw new Error('Permission denied')
       config.path.push(req.query.id)
       await update({deleted: true}, config)
       res.status(200).send('ok')

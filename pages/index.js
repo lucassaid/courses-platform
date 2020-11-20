@@ -6,6 +6,7 @@ import CoursesList from '../components/coursesList'
 import utilStyles from '../styles/utils.module.css'
 import HomeHeader from '../components/homeHeader'
 import TestimonialsCarousel from '../components/testimonialsCarousel'
+import SocialLinks from '../components/socialLinks'
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -50,6 +51,7 @@ const IndexPage = ({slides}) => {
         <Row gutter={[8, 24]}>
           <Col xs={24} md={8} style={{textAlign: 'center'}}>
             <Avatar size={170} src="/images/juli-amelie.png"/>
+            <SocialLinks style={{marginTop: 5, justifyContent: 'center'}}/>
           </Col>
           <Col xs={24} md={16}>
             <Title  style={{fontFamily: "'Pacifico', cursive", fontWeight: 100}}>Hola!</Title>
@@ -61,12 +63,23 @@ const IndexPage = ({slides}) => {
       </Section>
 
       <Section bg className={utilStyles.headingMd}>
-        <Paragraph>
-          Acá vas a encontrar todos mis cursos online con diferentes temáticas: Para aprender y para emprender. Espero poder acompañarte en cada paso y que juntas vayamos por todos tus objetivos!
-        </Paragraph>
-        <Paragraph>
-          ¡Sí podés, sí sos capaz, sí te lo merecés!
-        </Paragraph>
+        <Row
+          style={{flexDirection: 'row-reverse'}}
+          gutter={[40, 40]}
+          align="middle"
+        >
+          <Col xs={24} md={12}>
+            <img src="/images/learn.svg" alt=""/>
+          </Col>
+          <Col xs={24} md={12}>
+            <Paragraph>
+              Acá vas a encontrar todos mis cursos online con diferentes temáticas: Para aprender y para emprender. Espero poder acompañarte en cada paso y que juntas vayamos por todos tus objetivos!
+            </Paragraph>
+            <Paragraph>
+              ¡Sí podés, sí sos capaz, sí te lo merecés!
+            </Paragraph>
+          </Col>
+        </Row>
       </Section>
 
       <Section>

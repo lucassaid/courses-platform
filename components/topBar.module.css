@@ -1,17 +1,17 @@
 .nav {
-  height: 70px;
+  height: 60px;
   position: absolute;
   z-index: 10;
   width: 100%;
-  background: rgb(0,0,0);
-  background: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 100%);
+  background: rgba(255,255,255, 0.6);
+  position: fixed;
 }
 
 .container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 10px;
+  height: 100%;
 }
 
 .logo {
@@ -19,5 +19,5 @@
 }
 
 .link {
-  color: white;
+  color: inherit;
 }
