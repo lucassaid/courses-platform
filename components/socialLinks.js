@@ -5,7 +5,6 @@ import {
   YoutubeOutlined,
 } from '@ant-design/icons'
 import useSWR from 'swr'
-import styles from './socialLinks.module.css'
 
 const fetcher = url => fetch(url).then(r => r.json())
 
@@ -16,7 +15,7 @@ const icons = {
   'youtube': <YoutubeOutlined/>
 }
 
-export default function socialLinks({style, linksStyle}) {
+export default function socialLinks({style, linksStyle = {}}) {
   const {data, error} = useSWR('/api/customization/contactData', fetcher)
   if(!data) return <></>
 
@@ -25,8 +24,8 @@ export default function socialLinks({style, linksStyle}) {
     return (
       <a 
         href={data[name]}
-        className={styles.link}
-        style={linksStyle}
+        className="block text-2xl m-3 transition transform hover:scale-125"
+        style={{ color: '#4CDAE7', ...linksStyle}}
         target="_blank"
       >
         {icons[name]}
@@ -34,7 +33,7 @@ export default function socialLinks({style, linksStyle}) {
     )
   }
   return (
-    <div className={styles.container} style={style}>
+    <div className="flex" style={style}>
       {Object.keys(data).map(name => (
         <SocialLink
           key={name}

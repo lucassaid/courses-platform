@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import CourseLayout from '../courseLayout'
 import useUser from '../../hooks/useUser'
 import { useRouter } from 'next/router'
@@ -24,6 +24,23 @@ const saveCompletedCourse = async courseId => {
   return await axios.put('/api/learn', {type: 'finished-course', courseId})
 }
 
+const getCompletedLessons = (userProgress) => {
+  let completedLessons = 0
+  for(const lesson of Object.values(userProgress.lessons)) {
+    if(lesson.completed) completedLessons++
+  }
+  return completedLessons
+}
+
+const emptyCourse = {
+  lessonsOrder: [],
+  sectionsOrder: []
+}
+
+const emptyUserProgress = {
+  lessons: {}
+}
+
 const Learn = () => {
 
   const [modals, setModals] = useState({next: false, finished: false}) 
@@ -32,17 +49,21 @@ const Learn = () => {
   const {user, error: userError} = useUser()
   const router = useRouter()
   const { slug, id: currentLesson } = router.query
-  const {data: course, error: courseerror} = useSWR(() => `/api/courses/${slug}`, fetcher)
-  const {data: lessons, error: lessonsError} = useSWR(() => `/api/courses/lessons?courseId=${course.id}`, fetcher)
-  const {data: userProgress, error: progressError} = useSWR(() => `/api/learn?courseId=${course.id}`, fetcher)
-  
-  const finalLesson = course && currentLesson == course.lessonsOrder[course.lessonsOrder.length - 1]
-  const lesson = lessons && currentLesson && lessons[currentLesson]
-  const actualIndex = currentLesson && course && course.lessonsOrder.indexOf(currentLesson)
+  const {data: course = emptyCourse } = useSWR(() => `/api/courses/${slug}`, fetcher)
+  const {data: lessons = {} } = useSWR(() => `/api/courses/lessons?courseId=${course.id}`, fetcher)
+  const {data: userProgress = emptyUserProgress } = useSWR(() => `/api/learn?courseId=${course.id}`, fetcher)
+
+  const { lessonsOrder } = course
+  const completedLessons = useMemo(() => getCompletedLessons(userProgress), [userProgress])
+  const progressPercentage = (completedLessons / lessonsOrder.length) * 100
+  const finishedCourse = completedLessons + 1 == lessonsOrder.length
+  const lesson = lessons[currentLesson]
+  const actualIndex = currentLesson && lessonsOrder.length && lessonsOrder.indexOf(currentLesson)
 
   const menu = (
     <Menu
       currentLesson={currentLesson}
+      progressPercentage={progressPercentage}
       userProgress={userProgress}
       course={course}
       lessons={lessons}
@@ -50,17 +71,16 @@ const Learn = () => {
   )
 
   const next = async () => {
-    const modalTarget = finalLesson ? 'finished' : 'next'
+    const modalTarget = finishedCourse ? 'finished' : 'next'
     setModals({ ...modals, [modalTarget]: true})
 
     await mutate(`/api/learn?courseId=${course.id}`, async (oldProgress) => {
-      console.log(oldProgress)
       const newProgress = await saveCompletedLesson(course.id, lesson.id)
       return { ...oldProgress, newProgress}
     })
 
-    if(!finalLesson) {
-      const nextLesson = course.lessonsOrder[actualIndex + 1]
+    if(!finishedCourse) {
+      const nextLesson = lessonsOrder[actualIndex + 1]
       router.push('/[slug]/learn/[id]', `/${slug}/learn/${nextLesson}`)
       setModals({...modals, next: false})
     } else {
@@ -71,7 +91,7 @@ const Learn = () => {
   
   return (
     <>
-      <CourseLayout menu={menu} title={course && course.name}>
+      <CourseLayout menu={menu} title={course.name}>
         <>
           {lesson && (
             <div className={styles.lessonContainer}>
@@ -97,7 +117,10 @@ const Learn = () => {
           )}
         </>
         <NextLessonModal visible={modals.next}/>
-        <FinishedCourseModal saved={finishedCourseSaved} visible={modals.finished}/>
+        <FinishedCourseModal
+          saved={finishedCourseSaved}
+          visible={modals.finished}
+        />
       </CourseLayout>
       {modals.finished && <Confetti numberOfPieces={400}/> }
 

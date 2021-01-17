@@ -1,5 +1,4 @@
 import { Card, Skeleton, Typography} from 'antd'
-import styles from './courseCard.module.css'
 const { Meta } = Card
 const { Text } = Typography
 
@@ -19,7 +18,7 @@ const CourseCard = ({children, actions, title, extra, course = {}, showMp, loadi
       hoverable={!noHoverable}
       title={title}
       extra={extra}
-      className={styles.card}
+      className="h-full"
       loading={loading}
       cover={cover}
       actions={actions}
@@ -30,18 +29,31 @@ const CourseCard = ({children, actions, title, extra, course = {}, showMp, loadi
         description={course.desc}
       />
       
-      <div className={styles.bottom}>
+      <div
+        className="absolute bottom-0 flex justify-between items-end mb-3"
+        style={{width: 'calc(100% - 50px)'}}
+      >
         <div>
           {course.old_price && (
             <div>
-              <Text className={styles.oldPrice} type="secondary">${course.old_price}</Text>
+              <Text
+                className="line-through font-light text-sm opacity-70"
+                type="secondary"
+              >
+                ${course.old_price}
+              </Text>
             </div>
           )}
-          <Text className={styles.price} type="secondary">${course.price}</Text>
+          <Text
+            className="text-2xl font-light"
+            type="secondary"
+          >
+            ${course.price}
+          </Text>
         </div>
         {showMp && (
           <img
-            style={{width: 30}}
+            className="w-8 mb-1"
             src="/images/mp-logo-sm.png"
             alt="Juli Amelie Mercado Pago"
           />

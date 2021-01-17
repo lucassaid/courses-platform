@@ -25,8 +25,8 @@ export default function BasicLayout({ children, page }) {
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
 
-      <Layout style={{position: 'relative'}}>
-        <TopBar/>
+      <TopBar/>
+      <Layout className="pt-20">
         <Content>
           <main>{children}</main>
         </Content>

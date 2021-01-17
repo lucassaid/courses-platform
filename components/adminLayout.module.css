@@ -1,15 +1,10 @@
 .siteLayout {
   margin-left: 250px;
   margin-bottom: 70px;
-}
-
-.content {
-  margin: 74px 16px 0;
-  overflow: initial;
+  position: relative;
 }
 
 .header {
-  padding: 0;
   position: fixed;
   z-index: 2;
   width: calc(100% - 250px);
@@ -20,43 +15,12 @@
   background-color: rgb(62, 62, 80);
 }
 
-.sider {
-  overflow: auto;
-  height: 100vh;
-  position: fixed;
-  z-index: 2;
-  left: 0;
-}
-
-.siderFooter {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-}
-
-.toggleSiderCollapsed {
-  display: none;
-}
-
-.siderHeader {
-  padding: 15px
-}
-
-.main {
-  max-width: 60rem;
-  margin: 0 auto;
-}
-
-@media(max-width: 991px) {
+@media(max-width: 1023px) {
   .header {
     width: 100%;
   }
 
   .siteLayout {
     margin-left: 0;
-  }
-
-  .toggleSiderCollapsed {
-    display: inline-block;
   }
 }

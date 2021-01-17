@@ -3,7 +3,6 @@ import Layout, { name, siteTitle } from '../components/layout'
 import Section from '../components/section'
 import { Avatar, Row, Col, Typography } from 'antd'
 import CoursesList from '../components/coursesList'
-import utilStyles from '../styles/utils.module.css'
 import HomeHeader from '../components/homeHeader'
 import TestimonialsCarousel from '../components/testimonialsCarousel'
 import SocialLinks from '../components/socialLinks'
@@ -47,7 +46,7 @@ const IndexPage = ({slides}) => {
 
       <HomeHeader/>
 
-      <Section className={utilStyles.headingMd}>
+      <Section>
         <Row gutter={[8, 24]}>
           <Col xs={24} md={8} style={{textAlign: 'center'}}>
             <Avatar size={170} src="/images/juli-amelie.png"/>
@@ -62,7 +61,7 @@ const IndexPage = ({slides}) => {
         </Row>
       </Section>
 
-      <Section bg className={utilStyles.headingMd}>
+      <Section bg>
         <Row
           style={{flexDirection: 'row-reverse'}}
           gutter={[40, 40]}

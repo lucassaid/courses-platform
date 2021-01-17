@@ -2,8 +2,9 @@ import styled, {css} from 'styled-components'
 import LessonTypeIcon from '../lessonTypeIcon'
 import { Typography } from 'antd'
 import { CheckOutlined } from '@ant-design/icons'
+import { useRef, useEffect } from 'react'
 
-const { Text, Title } = Typography
+const { Text } = Typography
 
 const Lesson = styled.div`
   padding: 8px;
@@ -52,9 +53,31 @@ const checkStyle = {
   fontSize: 15
 }
 
-const LessonItem = ({lesson, lessonNumber, done, selected}) => {
+const scrollContainer = (container, top) => {
+  console.log(container, top)
+  container.scrollTo({top, behavior: 'smooth'})
+}
+
+const LessonItem = ({lesson = {}, lessonNumber, done, selected, containerRef}) => {
+
+  const lessonRef = useRef(null)
+
+  useEffect(() => {
+    if(!selected) return
+    const { top } = lessonRef.current.getBoundingClientRect()
+    const lessonIsHidden = top > document.body.clientHeight - 72
+    if(lessonIsHidden) {
+      const container = containerRef.current
+      const targetTop = container.scrollTop + top - 100
+      scrollContainer(container, targetTop)
+    }
+  }, [selected])
+
   return (
-    <Lesson selected={selected}>
+    <Lesson
+      selected={selected}
+      ref={lessonRef}
+    >
       <Left done={done}>
         {done ? (
           <CheckOutlined style={checkStyle} />

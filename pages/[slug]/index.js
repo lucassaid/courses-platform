@@ -2,7 +2,6 @@ import Layout, { siteTitle } from '../../components/layout'
 import Head from 'next/head'
 import HeaderImage from '../../components/headerImage'
 import Section from '../../components/section'
-import utilStyles from '../../styles/utils.module.css'
 import CoursesList from '../../components/coursesList'
 import { Typography, Row, Col, Card, Button} from 'antd'
 import {
@@ -104,7 +103,7 @@ export default function CourseOverview() {
         alt={course.name}
       />
 
-      <Section className={utilStyles.headingMd}>
+      <Section>
         <Row gutter={[32, 12]}>
           <Col xs={24} md={15}>
             <Title level={2}>{course.name}</Title>

@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react'
 import { PageHeader, Empty } from 'antd'
 import AdminLayout from '../../components/adminLayout'
 

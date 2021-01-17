@@ -10,15 +10,14 @@ import {
   MenuUnfoldOutlined,
   EditOutlined
 } from '@ant-design/icons';
-import styles from './adminLayout.module.css'
 import UploadsDrawer from './uploadsDrawer'
 import useUser from '../hooks/useUser'
 import { useSelector } from 'react-redux'
 import { selectUploads } from '../lib/slices/uploadsSlice'
+import styles from './adminLayout.module.css'
 
 const { Meta } = Card
-const { Header, Content, Footer, Sider } = Layout;
-const { SubMenu } = Menu
+const { Header, Content, Sider } = Layout;
 
 export const name = 'Juli Amelie'
 export const siteTitle = 'Juli Amelie'
@@ -27,7 +26,7 @@ const AdminMenu = ({page}) => {
 
   return (
     <>
-      <div className={styles.siderHeader}>
+      <div className="p-4">
         <Link href="/admin">
           <a alt="Admin">
             <img
@@ -95,7 +94,7 @@ export default function AdminLayout({ children, page }) {
   useEffect(() => {
     // render Drawer or Sider according to window size
     function updateSize() {
-      setSmallScreen(document.body.clientWidth < 992)
+      setSmallScreen(document.body.clientWidth < 1024)
     }
     window.addEventListener('resize', updateSize)
     updateSize()
@@ -125,6 +124,33 @@ export default function AdminLayout({ children, page }) {
     />
   )
 
+  const drawer = (
+    <Drawer
+      closable={false}
+      placement="left"
+      onClose={() => setDrawerOpened(false)}
+      visible={drawerOpened}
+      bodyStyle={{padding: 0}}
+      footer={menuFooter}
+    >
+      <AdminMenu page={page}/>
+    </Drawer>
+  )
+
+  const sider = (
+    <Sider
+      collapsible={false}
+      width={250}
+      className="overflow-auto h-screen fixed z-10 left-0 bg-white"
+    >
+      <AdminMenu page={page}/>
+
+      <div className="absolute bottom-0 left-0">
+        {menuFooter}
+      </div>
+    </Sider>
+  )
+
   return (
     <>
       <Head>
@@ -132,44 +158,25 @@ export default function AdminLayout({ children, page }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Layout hasSider={!smallScreen}>
+      <Layout
+        className="justify-end"
+        hasSider={!smallScreen}
+      >
 
-        {smallScreen ? (
-          <Drawer
-            closable={false}
-            placement="left"
-            onClose={() => setDrawerOpened(false)}
-            visible={drawerOpened}
-            bodyStyle={{padding: 0}}
-            footer={menuFooter}
-          >
-            <AdminMenu page={page}/>
-          </Drawer>
-        ):(
-          <Sider
-            collapsible={false}
-            style={{backgroundColor: 'white'}}
-            width={250}
-            className={styles.sider}
-          >
-            <AdminMenu page={page}/>
+        {smallScreen ? drawer : sider}
 
-            <div className={styles.siderFooter}>
-              {menuFooter}
-            </div>
-          </Sider>
-        )}
-        <Layout className={styles.siteLayout} style={{position: 'relative'}}>
+        <Layout className={styles.siteLayout}>
           <Header className={styles.header}>
-            <Button
-              className={styles.toggleSiderCollapsed}
-              type="text"
-              style={{color: 'white'}}
-              size="large"
-              icon={<MenuUnfoldOutlined/>}
-              onClick={() => setDrawerOpened(true)}
-            />
-            <div style={{marginLeft: 'auto', cursor: 'pointer'}}>
+            <div className="block lg:hidden">
+              <Button
+                className="text-white"
+                type="text"
+                size="large"
+                icon={<MenuUnfoldOutlined/>}
+                onClick={() => setDrawerOpened(true)}
+              />
+            </div>
+            <div className="ml-auto cursor-pointer">
               <Badge
                 count={currentUploadsLength}
                 onClick={() => setUploadsVisible(true)}
@@ -178,8 +185,8 @@ export default function AdminLayout({ children, page }) {
               </Badge>
             </div>
           </Header>
-          <Content className={styles.content}>
-            <main className={styles.main}>
+          <Content className="mt-16 mx-4">
+            <main className="max-w-2xl mx-auto">
               {children}
             </main>
           </Content>

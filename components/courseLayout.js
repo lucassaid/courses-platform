@@ -41,6 +41,7 @@ export default function CourseLayout({ children, menu, title, drawerTitle }) {
             onClose={() => setDrawerOpened(false)}
             visible={drawerOpened}
             bodyStyle={{padding: 0, overflow: 'hidden'}}
+            width={300}
           >
             {menu}
           </Drawer>

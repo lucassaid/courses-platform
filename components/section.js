@@ -1,4 +1,3 @@
-import utilStyles from '../styles/utils.module.css'
 import styles from './section.module.css'
 import { Typography } from 'antd'
 const { Title } = Typography
@@ -25,7 +24,7 @@ const Section = ({
   if(bgMirror) bgClassName += ` ${styles.sectionBgMirror}`
   if(bgHigh) bgClassName += ` ${styles.sectionBgHigh}`
   if(bgSoft) bgClassName += ` ${styles.sectionBgSoft}`
-  const fullClass = `${bgClassName} ${styles.section} ${utilStyles.mb20} ${className}`
+  const fullClass = `${bgClassName} ${styles.section} mb-5 ${className}`
 
   return (
     <section 

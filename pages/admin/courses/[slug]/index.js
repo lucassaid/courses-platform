@@ -112,7 +112,7 @@ const CourseOverview = () => {
             <br/>
             <div>
               link en la pagina:
-              <Link href="/courses/[slug]" as={`/courses/${course.slug}`}>
+              <Link href="/[slug]" as={`/${course.slug}`}>
                 <a>&nbsp; ameliejulieta.com/{course.slug}</a>
               </Link>
             </div>

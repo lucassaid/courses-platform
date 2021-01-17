@@ -1,7 +1,7 @@
 import Link from 'next/link'
-import styles from './topBar.module.css'
 import { Space } from 'antd'
 import { Container } from './section'
+import useScrollQuery from '../lib/useScrollQuery'
 
 const navItems = [
   {
@@ -18,15 +18,17 @@ const navItems = [
   }
 ]
 
-const TopBar = ({props}) => {
+const TopBar = () => {
+
+  const scrolled = useScrollQuery(50)
 
   return(
-    <nav className={styles.nav}>
-      <Container className={styles.container}>
+    <nav className={`${scrolled ? 'h-16' : 'h-20'} transition-all duration-300 fixed w-full z-20 bg-white bg-opacity-90`}>
+      <Container className="flex h-full justify-between items-center">
         <Link href="/">
           <a alt="al inicio">
             <img
-              className={styles.logo}
+              className={`transition-all duration-300 ${scrolled ? 'w-12' : 'w-14'}`}
               src="/images/logo.png"
               alt="Julieta Amelie"
             />
@@ -36,7 +38,12 @@ const TopBar = ({props}) => {
         <Space size="large">
           {navItems.map(item => (
             <Link href={item.href} key={item.href}>
-              <a className={styles.link} alt={item.label}>{item.label}</a>
+              <a
+                className="text-lg"
+                alt={item.label}
+              >
+                {item.label}
+              </a>
             </Link>
           ))}
         </Space>

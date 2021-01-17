@@ -14,16 +14,19 @@ export default async function (req, res) {
         const updatePath = `courses.${courseId}.lessons.${lessonId}.completed`
         await update({[updatePath]: true}, {path: ['users', uid]})
       } else if(type === 'finished-course') {
-        const updatePath = `courses.${courseId}.lessons.completed`
+        const updatePath = `courses.${courseId}.completed`
         await update({[updatePath]: true}, {path: ['users', uid]})
       }
 
       // send updated doc
       const userDoc = await getDoc(uid, {path: ['users']})
       res.send(userDoc[uid].courses)
+
     } else if(req.method === 'GET') {
       const userDoc = await getDoc(uid, {path: ['users']})
-      res.send(userDoc[uid].courses[req.query.courseId])
+      const response = userDoc[uid].courses[req.query.courseId]
+      res.send(response)
+
     }
 
   } catch(err) {
