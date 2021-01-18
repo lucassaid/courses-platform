@@ -9,7 +9,11 @@ const Footer = () => {
 
   return(
     <footer>
-      <Section bgHigh bg bgMirror bgHeight="180%">
+      <Section
+        backgroundAngle={2}
+        backgroundColor="#dd60b5"
+        style={{position: 'relative', bottom: -70}}
+      >
         <Meta
           avatar={<Avatar size={64} src="/images/juli-amelie.png" />}
           title="Juli Amelie"

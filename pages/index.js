@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Layout, { name, siteTitle } from '../components/layout'
 import Section from '../components/section'
-import { Avatar, Row, Col, Typography } from 'antd'
+import { Avatar, Row, Col, Typography, Space } from 'antd'
 import CoursesList from '../components/coursesList'
 import HomeHeader from '../components/homeHeader'
 import TestimonialsCarousel from '../components/testimonialsCarousel'
@@ -61,29 +61,33 @@ const IndexPage = ({slides}) => {
         </Row>
       </Section>
 
-      <Section bg>
+      <Section backgroundAngle={-2} backgroundColor="#dd60b5">
         <Row
-          style={{flexDirection: 'row-reverse'}}
-          gutter={[40, 40]}
+          className="flex-row-reverse text-white"
+          gutter={[50, 50]}
           align="middle"
         >
           <Col xs={24} md={12}>
             <img src="/images/learn.svg" alt=""/>
           </Col>
           <Col xs={24} md={12}>
-            <Paragraph>
-              Acá vas a encontrar todos mis cursos online con diferentes temáticas: Para aprender y para emprender. Espero poder acompañarte en cada paso y que juntas vayamos por todos tus objetivos!
-            </Paragraph>
-            <Paragraph>
-              ¡Sí podés, sí sos capaz, sí te lo merecés!
-            </Paragraph>
+            <Space size="middle" direction="vertical">
+              <p>
+                Acá vas a encontrar todos mis cursos online con diferentes temáticas: Para aprender y para emprender. Espero poder acompañarte en cada paso y que juntas vayamos por todos tus objetivos!
+              </p>
+              <p>
+                ¡Sí podés, sí sos capaz, sí te lo merecés!
+              </p>
+            </Space>
           </Col>
         </Row>
       </Section>
 
       <Section>
         <div style={{marginBottom: 40}}>
-          <Title style={{fontFamily: "'Pacifico', cursive", fontWeight: 100}}>Cursos</Title>
+          <Title style={{fontFamily: "'Pacifico', cursive", fontWeight: 100}}>
+            Cursos
+          </Title>
           <Text type="secondary">
             ¿Estás lista para tomar acción?
           </Text>
@@ -92,12 +96,11 @@ const IndexPage = ({slides}) => {
         
       </Section>
 
-      <Section bg bgSoft>
-        <div style={{marginBottom: 50}}>
-          <Title style={{fontFamily: "'Pacifico', cursive", fontWeight: 100}}>¡Vos también podés!</Title>
-          {/* <Text type="secondary">
-            Testimoniales
-          </Text> */}
+      <Section backgroundAngle={-2} backgroundColor="#E7E7E7">
+        <div className="mb-20">
+          <Title style={{fontFamily: "'Pacifico', cursive", fontWeight: 100}}>
+            ¡Vos también podés!
+          </Title>
         </div>
         <TestimonialsCarousel/>
         

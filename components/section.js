@@ -1,41 +1,34 @@
-import styles from './section.module.css'
-import { Typography } from 'antd'
-const { Title } = Typography
 
 export const Container = ({children, className = ''}) => (
-  <div className={`${styles.container} ${className}`}>
+  <div className={`w-full max-w-5xl mx-auto px-4 ${className}`}>
     {children}
   </div>
 )
 
-const Section = ({
+export default function Section({
   children,
-  title,
-  bg,
-  bgMirror,
-  bgHigh,
-  bgSoft,
-  style = {},
-  className = '',
-  ...props
-}) => {
+  backgroundAngle = 0,
+  backgroundColor,
+  style
+}) {
 
-  let bgClassName = bg ? styles.sectionBg : '' 
-  if(bgMirror) bgClassName += ` ${styles.sectionBgMirror}`
-  if(bgHigh) bgClassName += ` ${styles.sectionBgHigh}`
-  if(bgSoft) bgClassName += ` ${styles.sectionBgSoft}`
-  const fullClass = `${bgClassName} ${styles.section} mb-5 ${className}`
+  const bgStyle = {
+    transform: `rotate(${backgroundAngle}deg)`,
+    backgroundColor,
+  }
 
-  return (
-    <section 
+  return(
+    <section
+      className="w-full relative z-10 my-20 py-14"
       style={style}
-      className={fullClass}
     >
-      <Container className={styles.content}>
-        {title && <Title level={3}>{title}</Title>}
+      <Container className="relative z-10">
         {children}
       </Container>
-    </section>
+      <div
+        className="absolute -top-14 -right-1/4 -left-1/4 -bottom-14"
+        style={bgStyle}
+      />
+    </section> 
   )
 }
-export default Section

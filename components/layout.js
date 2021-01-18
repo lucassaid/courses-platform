@@ -26,9 +26,11 @@ export default function BasicLayout({ children, page }) {
       </Head>
 
       <TopBar/>
-      <Layout className="pt-20">
+      <Layout className="pt-20 overflow-x-hidden">
         <Content>
-          <main>{children}</main>
+          <main className="text-lg">
+            {children}
+          </main>
         </Content>
         <Footer/>
       </Layout>
